@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
-project(bioinformatics)
+project(Bioinformatics)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(setup main.cpp)
+add_executable(Bioinformatics
+        src/main.cpp)

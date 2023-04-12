@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: bioinformatics
+# Project: Bioinformatics
 # Configurations: Debug
 # =============================================================================
 
@@ -41,38 +41,38 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /home/fpankretic/dev/Bioinformatics/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target setup
+# Object build statements for EXECUTABLE target Bioinformatics
 
 
 #############################################
-# Order-only phony target for setup
+# Order-only phony target for Bioinformatics
 
-build cmake_object_order_depends_target_setup: phony || CMakeFiles/setup.dir
+build cmake_object_order_depends_target_Bioinformatics: phony || CMakeFiles/Bioinformatics.dir
 
-build CMakeFiles/setup.dir/main.cpp.o: CXX_COMPILER__setup_Debug /home/fpankretic/dev/Bioinformatics/main.cpp || cmake_object_order_depends_target_setup
-  DEP_FILE = CMakeFiles/setup.dir/main.cpp.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu++20
-  OBJECT_DIR = CMakeFiles/setup.dir
-  OBJECT_FILE_DIR = CMakeFiles/setup.dir
-  TARGET_COMPILE_PDB = CMakeFiles/setup.dir/
-  TARGET_PDB = setup.pdb
+build CMakeFiles/Bioinformatics.dir/src/main.cpp.o: CXX_COMPILER__Bioinformatics_Debug /home/fpankretic/dev/Bioinformatics/src/main.cpp || cmake_object_order_depends_target_Bioinformatics
+  DEP_FILE = CMakeFiles/Bioinformatics.dir/src/main.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Bioinformatics.dir
+  OBJECT_FILE_DIR = CMakeFiles/Bioinformatics.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/Bioinformatics.dir/
+  TARGET_PDB = Bioinformatics.pdb
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target setup
+# Link build statements for EXECUTABLE target Bioinformatics
 
 
 #############################################
-# Link the executable setup
+# Link the executable Bioinformatics
 
-build setup: CXX_EXECUTABLE_LINKER__setup_Debug CMakeFiles/setup.dir/main.cpp.o
+build Bioinformatics: CXX_EXECUTABLE_LINKER__Bioinformatics_Debug CMakeFiles/Bioinformatics.dir/src/main.cpp.o
   FLAGS = -g
-  OBJECT_DIR = CMakeFiles/setup.dir
+  OBJECT_DIR = CMakeFiles/Bioinformatics.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_COMPILE_PDB = CMakeFiles/setup.dir/
-  TARGET_FILE = setup
-  TARGET_PDB = setup.pdb
+  TARGET_COMPILE_PDB = CMakeFiles/Bioinformatics.dir/
+  TARGET_FILE = Bioinformatics
+  TARGET_PDB = Bioinformatics.pdb
 
 
 #############################################
@@ -108,7 +108,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/fpankretic/dev/Bioinformatics/cmake-build-debug
 
-build all: phony setup
+build all: phony Bioinformatics
 
 # =============================================================================
 # Built-in targets
