@@ -40,7 +40,23 @@ public:
         unordered_set<char> chars;
     }
 
-    char access(int i);
+    char access(int i) {
+        Node* n = start;
+
+        while(!n->chr) {
+            bool b = n.vector[i];
+
+            if (!b) {
+                i = n.rank0(i);
+                n = n->left;
+            } else {
+                i = n.rank1(i);
+                n = n->right;
+            }
+        }
+
+        return n->chr;
+    }
 
     int rank(char x, int i) {
         Node* n = start;
@@ -96,6 +112,7 @@ public:
 
         return i;
     }
+    
     void print();
 };
 
