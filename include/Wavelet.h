@@ -39,7 +39,6 @@ public:
      * Postavi mapu charactera
      * */
     void build(string& str);
-
     char access(int idx);
     int rank(char c, int idx);
     int select(char c, int idx);
