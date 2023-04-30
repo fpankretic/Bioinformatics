@@ -6,8 +6,10 @@
 #define BIOINFORMATICS_WAVELET_H
 
 #include <sdsl/bit_vectors.hpp>
+#include <iostream>
 #include <string>
 #include <unordered_set>
+#include <queue>
 
 using namespace std;
 using namespace sdsl;
@@ -44,7 +46,7 @@ public:
         Node* n = start;
 
         while(!n->chr) {
-            bool b = n.vector[i];
+            bool b = n->vector[i];
 
             if (!b) {
                 i = n.rank0(i);
@@ -112,8 +114,28 @@ public:
 
         return i;
     }
-    
-    void print();
+
+    void print() {
+        queue<pair<Node*, int>> open;
+        open.push(make_pair(start, 0));
+
+        while (!open.empty()) {
+            pair<Node*, int> curr = open.front();
+
+            Node* curr_node = curr.first;
+            int curr_depth = curr.second;
+
+            open.push(make_pair(curr_node->left, curr_depth + 1));
+            open.push(make_pair(curr_node->right, curr_depth + 1));
+
+            string dpth = "";
+            for (int i = 0; i < curr_depth; ++i) {
+                dpth += "-";
+            }
+
+            cout << dpth << curr_node->vector << endl;
+        }
+    }
 };
 
 #endif //BIOINFORMATICS_WAVELET_H
