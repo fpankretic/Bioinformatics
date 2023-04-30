@@ -8,7 +8,7 @@ int main() {
     csa_wt<> fm_index;
     string pattern, text, line;
 
-    ifstream in("input.fna");
+    ifstream in("../input.fna");
     while (getline(in,line)) {
         text += line;
     }
@@ -18,7 +18,7 @@ int main() {
     cin >> pattern;
 
     construct_im(fm_index, text, 1);
-    ofstream out("output.txt");
+    ofstream out("../output.txt");
     cout << "'" << pattern << "'" << " occurs " << count(fm_index,pattern) << " times." << endl;
     out << "'" << pattern << "'" << " occurs " << count(fm_index,pattern) << " times." << endl;
     for (auto index: locate(fm_index, pattern)) {
