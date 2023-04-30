@@ -6,8 +6,10 @@
 #define BIOINFORMATICS_WAVELET_H
 
 #include <sdsl/bit_vectors.hpp>
+#include <iostream>
 #include <string>
 #include <unordered_set>
+#include <queue>
 
 using namespace std;
 using namespace sdsl;
@@ -132,10 +134,104 @@ public:
         build_impl(*start, str, alphabet);
     }
 
-    char access(int idx);
-    int rank(char c, int idx);
-    int select(char c, int idx);
-    void print();
+    char access(int i) {
+        Node* n = start;
+
+        while(!n->chr) {
+            int b = n->vector->get_int(i);
+
+            if (!b) {
+                i = n->rank0(i);
+                n = n->left;
+            } else {
+                i = n->rank1(i);
+                n = n->right;
+            }
+        }
+
+        return n->chr;
+    }
+
+    int rank(char x, int i) {
+        Node* n = start;
+        int k = 0;
+
+        while (n->chr != 0) {
+            char b = labels[x][k];
+            if (b == '0') {
+                i = n->rank0(i);
+                n = n->left;
+            } else {
+                i = n->rank1(i);
+                n = n->right;
+            }
+
+            k = k + 1;
+        }
+
+        return i;
+    }
+
+    int select(char x, int i) {
+        Node* n = start;
+        int k = 0;
+
+        while (!n->chr) {
+            char b = labels[x][k];
+
+            if (b == '0') {
+                n = n->left;
+            } else {
+                n = n->right;
+            }
+
+            k = k + 1;
+        }
+
+        k = labels[x].length() - 1;
+
+        while (n->parent) {
+            n = n->parent;
+            char b = labels[x][k];
+
+            if (b == '0') {
+                i = n->select0(i);
+            } else {
+                i = n->select1(i);
+            }
+
+            k = k - 1;
+        }
+
+        return i;
+    }
+
+    void print() {
+        queue<pair<Node*, int>> open;
+        open.emplace(start, 0);
+
+        while (!open.empty()) {
+            pair<Node*, int> curr = open.front();
+            open.pop();
+
+            Node* curr_node = curr.first;
+            int curr_depth = curr.second;
+
+            open.emplace(curr_node->left, curr_depth + 1);
+            open.emplace(curr_node->right, curr_depth + 1);
+
+            string dpth;
+            for (int i = 0; i < curr_depth; ++i) {
+                dpth += "-";
+            }
+
+            if (curr_node->vector) {
+                cout << dpth << curr_node->vector << endl;
+            } else {
+                cout << dpth << curr_node->chr << endl;
+            }
+        }
+    }
 };
 
 #endif //BIOINFORMATICS_WAVELET_H
