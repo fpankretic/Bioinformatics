@@ -7,6 +7,8 @@
 
 #include <sdsl/bit_vectors.hpp>
 #include <string>
+#include <unordered_set>
+
 using namespace std;
 using namespace sdsl;
 
@@ -28,17 +30,17 @@ class Wavelet {
 private:
     Node* start;
     unordered_map<char, int> char_map;
+    //unordered_set<char> characters = { 'A', 'C', 'G', 'T', 'N', '$' };
+    unordered_set<char> characters = { 'm', 'i', 's', 'p' };
 
 public:
     Wavelet(string& str) {
         build(str);
     }
 
-    /*
-     * Izgraditi nase stablo
-     * Postavi mapu charactera
-     * */
-    void build(string& str);
+    void build(string& str) {
+
+    }
     char access(int idx);
     int rank(char c, int idx);
     int select(char c, int idx);

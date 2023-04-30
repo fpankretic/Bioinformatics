@@ -158,7 +158,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "include/Node.h",
+			"path" : "include/Wavelet.h",
 			"sourceGroupIndex" : 1
 		}
 	],
