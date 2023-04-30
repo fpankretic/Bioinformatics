@@ -225,8 +225,10 @@ public:
             Node* curr_node = curr.first;
             int curr_depth = curr.second;
 
-            open.push(make_pair(curr_node->left, curr_depth + 1));
-            open.push(make_pair(curr_node->right, curr_depth + 1));
+            if (curr_node->left != nullptr)
+                open.push(make_pair(curr_node->left, curr_depth + 1));
+            if (curr_node->right != nullptr)
+                open.push(make_pair(curr_node->right, curr_depth + 1));
 
             string dpth;
             for (int i = 0; i < curr_depth; ++i) {
