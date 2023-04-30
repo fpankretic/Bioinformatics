@@ -133,7 +133,11 @@ public:
                 dpth += "-";
             }
 
-            cout << dpth << curr_node->vector << endl;
+            if (curr_node->vector) {
+                cout << dpth << curr_node->vector << endl;
+            } else {
+                cout << dpth << curr_node->chr << endl;
+            }
         }
     }
 };
