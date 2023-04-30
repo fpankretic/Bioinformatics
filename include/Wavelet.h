@@ -121,6 +121,7 @@ public:
 
         while (!open.empty()) {
             pair<Node*, int> curr = open.front();
+            open.pop();
 
             Node* curr_node = curr.first;
             int curr_depth = curr.second;
