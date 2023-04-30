@@ -16,15 +16,9 @@ struct Node {
     Node* parent;
     Node* left;
     Node* right;
-};
-
-struct BitNode : Node {
     bit_vector vector;
     rank_support_v<0,1> rank0;
     rank_support_v<1,1> rank1;
-};
-
-struct CharNode : Node {
     char chr;
 };
 
@@ -33,7 +27,7 @@ private:
     Node* start;
     unordered_map<char, int> char_map;
     //unordered_set<char> characters = { 'A', 'C', 'G', 'T', 'N', '$' };
-    unordered_set<char> characters = { 'm', 'i', 's', 'p' };
+    unordered_set<char> characters;
 
 public:
     Wavelet(string& str) {
@@ -41,8 +35,9 @@ public:
     }
 
     void build(string& str) {
-
+        unordered_set<char> chars;
     }
+
     char access(int idx);
     int rank(char c, int idx);
     int select(char c, int idx);
