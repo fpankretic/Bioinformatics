@@ -46,16 +46,16 @@ int main() {
     construct_im(csa, input, 1);
 
     vector<int> sa;
-    vector<char> bwt;
+    string bwt;
 
     for (int i = 0; i < csa.size(); ++i) {
         sa.push_back(csa[i]);
         char c = csa.bwt[i];
 
         if (c) {
-            bwt.push_back(c);
+            bwt += c;
         } else {
-            bwt.push_back('$');
+            bwt += '$';
         }
     }
 
@@ -72,6 +72,27 @@ int main() {
     }
 
     cout << endl;
+
+    string test_input = "abaaba";
+
+    csa_bitcompressed<> csa_test;
+    construct_im(csa_test, test_input, 1);
+
+    vector<int> sa_test;
+    string bwt_test;
+
+    for (int i = 0; i < csa_test.size(); ++i) {
+        sa_test.push_back(csa_test[i]);
+        char c = csa_test.bwt[i];
+
+        if (c) {
+            bwt_test += c;
+        } else {
+            bwt_test += '$';
+        }
+    }
+
+    Wavelet test_tree(bwt_test);
 
     return 0;
 }
