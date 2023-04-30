@@ -20,6 +20,8 @@ struct Node {
 
 struct BitNode : Node {
     bit_vector vector;
+    rank_support_v<0,1> rank0;
+    rank_support_v<1,1> rank1;
 };
 
 struct CharNode : Node {
