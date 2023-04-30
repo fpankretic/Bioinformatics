@@ -13,9 +13,9 @@ using namespace std;
 using namespace sdsl;
 
 struct Node {
-    Node* parent;
-    Node* left;
-    Node* right;
+    Node* parent = nullptr;
+    Node* left = nullptr;
+    Node* right = nullptr;
     bit_vector* vector;
     rank_support_v<0,1> rank0;
     rank_support_v<1,1> rank1;
@@ -23,7 +23,7 @@ struct Node {
     select_support_mcl<1,1> select1;
     char chr;
 
-    Node(string& str) {
+    explicit Node(string& str) {
         vector = new bit_vector(str.length(), 0);
         rank0 = rank_support_v<0,1>(vector);
         rank1 = rank_support_v<1,1>(vector);
@@ -32,7 +32,7 @@ struct Node {
         chr = 0;
     }
 
-    Node(char c) {
+    explicit Node(char c) {
         parent = nullptr;
         left = nullptr;
         right = nullptr;
@@ -53,8 +53,8 @@ private:
                     unordered_set<char>& alphas,
                     const string& label = "") {
         auto lr = get_alphabets(alphas);
-        unordered_set<char> left = *get<0>(lr);
-        unordered_set<char> right = *get<1>(lr);
+        unordered_set<char> left = get<0>(lr);
+        unordered_set<char> right = get<1>(lr);
 
         if (left.size() == 1) {
             if (right.size() == 1) {
@@ -74,8 +74,8 @@ private:
         }
 
         lr = get_alphabets(left);
-        left = *get<0>(lr);
-        right = *get<1>(lr);
+        left = get<0>(lr);
+        right = get<1>(lr);
         string new_left_str;
         string new_right_str;
         for (const auto &item: str) {
@@ -87,13 +87,17 @@ private:
         }
 
         Node new_left_node(str);
+        new_left_node.parent = &root;
+        root.left = &new_left_node;
         build_impl(new_left_node, new_left_str, left, label + '0');
 
         Node new_right_node(str);
+        new_right_node.parent = &root;
+        root.right = &new_right_node;
         build_impl(new_right_node, new_right_str, right, label + '1');
     }
 
-    static tuple<unordered_set<char>*,unordered_set<char>*> get_alphabets(unordered_set<char>& alphas) {
+    static tuple<unordered_set<char>,unordered_set<char>> get_alphabets(unordered_set<char>& alphas) {
         unordered_set<char> left;
         unordered_set<char> right;
         bool isLeft = true;
@@ -106,8 +110,7 @@ private:
             }
             isLeft = !isLeft;
         }
-
-        return tuple<unordered_set<char>*,unordered_set<char>*>{&left, &right};
+        return tuple<unordered_set<char>,unordered_set<char>>{left, right};
     }
 
 public:
