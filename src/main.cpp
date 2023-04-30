@@ -29,5 +29,7 @@ int main() {
 //
 //    cout << v;
 
+    cout << tree.rank('s', 3) << endl;
+
     return 0;
 }

@@ -138,13 +138,13 @@ public:
         Node* n = start;
 
         while(!n->chr) {
-            bool b = n->vector[i];
+            int b = n->vector->get_int(i);
 
             if (!b) {
-                i = n.rank0(i);
+                i = n->rank0(i);
                 n = n->left;
             } else {
-                i = n.rank1(i);
+                i = n->rank1(i);
                 n = n->right;
             }
         }
@@ -156,15 +156,14 @@ public:
         Node* n = start;
         int k = 0;
 
-        while (!n->chr) {
+        while (n->chr != 0) {
             char b = labels[x][k];
-
             if (b == '0') {
-                i = n.rank0(i);
-                n = n.left;
+                i = n->rank0(i);
+                n = n->left;
             } else {
-                i = n.rank1(i);
-                n = n.right;
+                i = n->rank1(i);
+                n = n->right;
             }
 
             k = k + 1;
@@ -181,24 +180,24 @@ public:
             char b = labels[x][k];
 
             if (b == '0') {
-                n = n.left;
+                n = n->left;
             } else {
-                n = n.right;
+                n = n->right;
             }
 
             k = k + 1;
         }
 
-        k = labels[c].length() - 1;
+        k = labels[x].length() - 1;
 
         while (n->parent) {
             n = n->parent;
             char b = labels[x][k];
 
             if (b == '0') {
-                i = n.select0(i);
+                i = n->select0(i);
             } else {
-                i = n.select1(i);
+                i = n->select1(i);
             }
 
             k = k - 1;
@@ -209,7 +208,7 @@ public:
 
     void print() {
         queue<pair<Node*, int>> open;
-        open.push(make_pair(start, 0));
+        open.emplace(start, 0);
 
         while (!open.empty()) {
             pair<Node*, int> curr = open.front();
@@ -218,10 +217,10 @@ public:
             Node* curr_node = curr.first;
             int curr_depth = curr.second;
 
-            open.push(make_pair(curr_node->left, curr_depth + 1));
-            open.push(make_pair(curr_node->right, curr_depth + 1));
+            open.emplace(curr_node->left, curr_depth + 1);
+            open.emplace(curr_node->right, curr_depth + 1);
 
-            string dpth = "";
+            string dpth;
             for (int i = 0; i < curr_depth; ++i) {
                 dpth += "-";
             }
