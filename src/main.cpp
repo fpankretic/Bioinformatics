@@ -73,6 +73,10 @@ int main() {
 
     cout << endl;
 
+    // --------------------------
+    // FM Index testing
+    // --------------------------
+
     string test_input = "abaaba";
 
     csa_bitcompressed<> csa_test;
@@ -93,6 +97,9 @@ int main() {
     }
 
     Wavelet test_tree(bwt_test);
+    string pattern = "aba";
+
+    cout << "Number of occurances of pattern in text: " << test_tree.count(pattern) << endl;
 
     return 0;
 }

@@ -221,6 +221,27 @@ public:
         return i;
     }
 
+    int count(string& p) {
+        int top = 0;
+        int bottom = start->vector->size();
+
+        int i = p.length() - 1;
+
+        while (i >= 0 && bottom > top) {
+            char c = p[i];
+            top = char_map[c] + rank(c, top);
+            bottom = char_map[c] + rank(c, bottom);
+
+            i = i - 1;
+        }
+
+        if (top >= bottom) {
+            return 0;
+        }
+
+        return bottom - top;
+    }
+
     void print() {
         queue<pair<Node*, int>> open;
         open.push(make_pair(start, 0));
