@@ -45,7 +45,7 @@ struct Node {
 class Wavelet {
 private:
     Node* start;
-    unordered_map<char, int> char_map;
+    map<char, int> char_map;
     unordered_map<char, string> labels;
     unordered_set<char> alphabet;
 
@@ -131,6 +131,13 @@ public:
                 char_map.insert({item, 0});
             }
             char_map[item] += 1;
+        }
+
+        int prev_cnt = 0;
+        for (auto item: char_map) {
+            int temp = item.second + prev_cnt;
+            char_map[item.first] = prev_cnt;
+            prev_cnt = temp;
         }
 
         assert(alphabet.size() >= 2);
