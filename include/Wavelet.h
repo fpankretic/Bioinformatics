@@ -23,15 +23,14 @@ struct Node {
     rank_support_v<1,1> rank1;
     select_support_mcl<0,1> select0;
     select_support_mcl<1,1> select1;
-    char chr;
+    char chr = 0;
 
     explicit Node(string& str) {
         vector = new bit_vector(str.length(), 0);
         rank0 = rank_support_v<0,1>(vector);
         rank1 = rank_support_v<1,1>(vector);
-        select0 = select_support_mcl<0,1>(vector);
-        select1 = select_support_mcl<1,1>(vector);
-        chr = 0;
+        select0 = select_support_mcl<0,1>();
+        select1 = select_support_mcl<1,1>();
     }
 
     explicit Node(char c) {
@@ -50,69 +49,73 @@ private:
     unordered_map<char, string> labels;
     unordered_set<char> alphabet;
 
-    void build_impl(Node& root,
+    void build_impl(Node* root,
                     string& str,
-                    unordered_set<char>& alphas,
-                    const string& label = "") {
+                    vector<char>& alphas,
+                    const string& label = "")
+    {
         auto lr = get_alphabets(alphas);
-        unordered_set<char> left = get<0>(lr);
-        unordered_set<char> right = get<1>(lr);
+        vector<char> left = get<0>(lr);
+        vector<char> right = get<1>(lr);
 
-        if (left.size() == 1) {
-            if (right.size() == 1) {
-                Node right_child(*right.begin());
-                root.right = &right_child;
-            }
-            Node left_child(*left.begin());
-            root.right = &left_child;
-            return;
-        }
-
-        bit_vector* v = root.vector;
+        unordered_set<char> set(right.begin(), right.end());
+        bit_vector* v = root->vector;
         for (int i = 0; i < v->size(); ++i) {
-            if (right.contains(str[i])) {
+            if (set.contains(str[i])) {
                 (*v)[i] = true;
             }
         }
 
-        lr = get_alphabets(left);
-        left = get<0>(lr);
-        right = get<1>(lr);
+        char c;
+        if (right.size() == 1) {
+            if (left.size() == 1) {
+                c = left[0];
+                Node* left_child = new Node(c);
+                left_child->parent = root;
+                root->left = left_child;
+                labels.insert({c, label + '0'});
+            }
+            c = right[0];
+            Node* right_child = new Node(c);
+            right_child->parent = root;
+            root->right = right_child;
+            labels.insert({c, label + '1'});
+            return;
+        }
+
         string new_left_str;
         string new_right_str;
         for (const auto &item: str) {
-            if (left.contains(item)) {
-                new_left_str += item;
-            } else {
+            if (set.contains(item)) {
                 new_right_str += item;
+            } else {
+                new_left_str += item;
             }
         }
 
-        Node new_left_node(str);
-        new_left_node.parent = &root;
-        root.left = &new_left_node;
+        Node* new_left_node = new Node(new_left_str);
+        new_left_node->parent = root;
+        root->left = new_left_node;
         build_impl(new_left_node, new_left_str, left, label + '0');
 
-        Node new_right_node(str);
-        new_right_node.parent = &root;
-        root.right = &new_right_node;
+        Node* new_right_node = new Node(new_right_str);
+        new_right_node->parent = root;
+        root->right = new_right_node;
         build_impl(new_right_node, new_right_str, right, label + '1');
     }
 
-    static tuple<unordered_set<char>,unordered_set<char>> get_alphabets(unordered_set<char>& alphas) {
-        unordered_set<char> left;
-        unordered_set<char> right;
-        bool isLeft = true;
-        for (const auto &item: alphas) {
-            if(isLeft) {
-                left.insert(item);
-            }
-            else {
-                right.insert(item);
-            }
-            isLeft = !isLeft;
+    static tuple<vector<char>,vector<char>> get_alphabets(vector<char>& alphas) {
+        vector<char> left;
+        vector<char> right;
+
+        for (int i = 0; i < alphas.size() / 2; ++i) {
+            left.push_back(alphas[i]);
         }
-        return tuple<unordered_set<char>,unordered_set<char>>{left, right};
+        for (int i = alphas.size() / 2; i < alphas.size(); ++i) {
+            right.push_back(alphas[i]);
+        }
+
+        return tuple<vector<char>,vector<char>>{left, right};
     }
 
 public:
@@ -131,14 +134,16 @@ public:
         }
 
         assert(alphabet.size() >= 2);
-        build_impl(*start, str, alphabet);
+        vector<char> alphas(alphabet.begin(), alphabet.end());
+        sort(alphas.begin(), alphas.end());
+        build_impl(start, str, alphas);
     }
 
     char access(int i) {
         Node* n = start;
 
-        while(!n->chr) {
-            int b = n->vector->get_int(i);
+        while(n->chr == 0) {
+            int b = (*n->vector)[i];
 
             if (!b) {
                 i = n->rank0(i);
@@ -156,7 +161,7 @@ public:
         Node* n = start;
         int k = 0;
 
-        while (n->chr != 0) {
+        while (n->chr == 0) {
             char b = labels[x][k];
             if (b == '0') {
                 i = n->rank0(i);
@@ -176,7 +181,7 @@ public:
         Node* n = start;
         int k = 0;
 
-        while (!n->chr) {
+        while (n->chr == 0) {
             char b = labels[x][k];
 
             if (b == '0') {
@@ -195,9 +200,12 @@ public:
             char b = labels[x][k];
 
             if (b == '0') {
+                cout << i << endl;
                 i = n->select0(i);
             } else {
+                cout << i << endl;
                 i = n->select1(i);
+                cout << i << endl;
             }
 
             k = k - 1;
@@ -208,7 +216,7 @@ public:
 
     void print() {
         queue<pair<Node*, int>> open;
-        open.emplace(start, 0);
+        open.push(make_pair(start, 0));
 
         while (!open.empty()) {
             pair<Node*, int> curr = open.front();
@@ -217,20 +225,24 @@ public:
             Node* curr_node = curr.first;
             int curr_depth = curr.second;
 
-            open.emplace(curr_node->left, curr_depth + 1);
-            open.emplace(curr_node->right, curr_depth + 1);
+            open.push(make_pair(curr_node->left, curr_depth + 1));
+            open.push(make_pair(curr_node->right, curr_depth + 1));
 
             string dpth;
             for (int i = 0; i < curr_depth; ++i) {
                 dpth += "-";
             }
 
-            if (curr_node->vector) {
-                cout << dpth << curr_node->vector << endl;
+            if (curr_node->vector != nullptr) {
+                cout << dpth << *(curr_node->vector) << endl;
             } else {
                 cout << dpth << curr_node->chr << endl;
             }
         }
+    }
+
+    Node* getStart() {
+        return start;
     }
 };
 
