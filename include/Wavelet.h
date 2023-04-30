@@ -221,7 +221,7 @@ public:
         return i;
     }
 
-    int count(string& p) {
+    pair<int, int>* match(string& p) {
         int top = 0;
         int bottom = start->vector->size();
 
@@ -234,6 +234,18 @@ public:
 
             i = i - 1;
         }
+
+        pair<int, int>* top_bottom = new pair<int,int>;
+        top_bottom->first = top;
+        top_bottom->second = bottom;
+
+        return top_bottom;
+    } 
+
+    int count(string& p) {
+        pair<int, int>* top_bottom = match(p);
+        int top = top_bottom->first;
+        int bottom = top_bottom->second;
 
         if (top >= bottom) {
             return 0;
