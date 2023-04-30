@@ -254,6 +254,23 @@ public:
         return bottom - top;
     }
 
+    vector<int>* locate(string& p, vector<int>& sa) {
+        pair<int, int>* top_bottom = match(p);
+        int top = top_bottom->first;
+        int bottom = top_bottom->second;
+
+        vector<int>* offsets = new vector<int>;
+
+        if (top < bottom) {
+            for (int i = top; i < bottom; ++i) {
+                offsets->push_back(sa[i]);
+            }
+        }
+
+        sort(offsets->begin(), offsets->end());
+        return offsets;
+    }
+
     void print() {
         queue<pair<Node*, int>> open;
         open.push(make_pair(start, 0));

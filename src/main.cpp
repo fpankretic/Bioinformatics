@@ -101,5 +101,17 @@ int main() {
 
     cout << "Number of occurances of pattern in text: " << test_tree.count(pattern) << endl;
 
+    vector<int>* occs = test_tree.locate(pattern, sa_test);
+
+    if (occs->size()) {
+        cout << endl << "Offsets of pattern in text: " << endl;
+
+        for (int offset: *occs) {
+            cout << "Offset: " << offset << endl;
+        }
+
+        cout << endl;
+    }
+
     return 0;
 }
