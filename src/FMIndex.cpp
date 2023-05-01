@@ -43,7 +43,6 @@ void FMIndex::print_pattern_offsets(string& pattern) {
         for (int offset: *occs) {
             cout << "Offset: " << offset << endl;
         }
-        cout << endl;
     }
 }
 
