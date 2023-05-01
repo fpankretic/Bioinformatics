@@ -38,7 +38,6 @@ int main() {
 
     FMIndex fm_index(input);
     fm_index.print_suffix_array();
-    fm_index.print_bwt();
 
     // --------------------------
     // FM Index testing

@@ -5,8 +5,8 @@
 #include "../include/FMIndex.hpp"
 
 FMIndex::FMIndex(const std::string &input) {
-    construct_im(csa, input, 1);
-    bwt = "";
+    csa_bitcompressed<> csa; construct_im(csa, input, 1);
+    string bwt = "";
     for (int i = 0; i < csa.size(); ++i) {
         suffix_array.push_back((int) csa[i]);
         char c = (char) csa.bwt[i];
@@ -32,14 +32,6 @@ void FMIndex::print_suffix_array() {
     cout << "Suffix array: ";
     for (int i: suffix_array) {
         cout << i << " ";
-    }
-    cout << endl;
-}
-
-void FMIndex::print_bwt() {
-    cout << "BWT: ";
-    for (char c: bwt) {
-        cout << c << " ";
     }
     cout << endl;
 }

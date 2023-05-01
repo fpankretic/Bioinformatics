@@ -11,17 +11,14 @@
 
 class FMIndex {
 private:
-    csa_bitcompressed<> csa;
     vector<int> suffix_array;
     Wavelet* wavelet_tree;
-    string bwt;
 
 public:
     explicit FMIndex(const string& input);
     int count(string& p);
     vector<int>* locate(string& p);
     void print_suffix_array();
-    void print_bwt();
     void print_pattern_offsets(string& pattern);
 };
 
