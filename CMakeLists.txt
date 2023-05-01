@@ -5,6 +5,6 @@ project(Bioinformatics)
 include_directories(${CMAKE_SOURCE_DIR}/sdsl-lite/install/include)
 link_directories(${CMAKE_SOURCE_DIR}/sdsl-lite/install/lib)
 
-add_executable(Bioinformatics main.cpp src/Wavelet.cpp src/FMIndex.cpp include/FMIndex.hpp)
+add_executable(Bioinformatics main.cpp src/Wavelet.cpp src/FMIndex.cpp)
 
 target_link_libraries(Bioinformatics sdsl divsufsort divsufsort64)
