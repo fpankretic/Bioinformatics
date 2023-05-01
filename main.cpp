@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <sdsl/suffix_arrays.hpp>
 #include "include/Wavelet.hpp"
 #include "include/FMIndex.hpp"
 
