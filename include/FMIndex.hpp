@@ -16,11 +16,11 @@ private:
 
 public:
     explicit FMIndex(const string& input);
-    pair<int, int> match(const string& p);
-    int count(const string& p);
-    vector<int> locate(const string& p);
+    pair<int, int> match(const string& pattern);
+    int count(const string& pattern);
+    vector<int> locate(const string& pattern);
     void print_suffix_array();
-    void print_pattern_offsets(string& pattern);
+    void print_pattern_offsets(const string& pattern);
 };
 
 #endif //BIOINFORMATICS_FMINDEX_HPP
