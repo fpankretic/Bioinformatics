@@ -138,6 +138,10 @@ int Wavelet::rank(const char x, int i) {
     Node *n = start;
     int k = 0;
 
+    if (i > n->vector->size() || labels.find(x) == labels.end() ) {
+        throw invalid_argument("Given input is invalid.");
+    }
+
     while (n->chr == 0) {
         char b = labels[x][k];
         if (b == '0') {
