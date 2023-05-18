@@ -67,9 +67,8 @@ public:
     Node* get_start();
     map<char, int> get_char_map();
     void build(const string& str);
-    char access(int i);
+    char access(unsigned long i);
     int rank(char x, int i);
-    int select(char x, int i);
     void print();
 };
 

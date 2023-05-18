@@ -2,7 +2,58 @@
 
 #include "../include/Wavelet.hpp"
 
-SCENARIO("Test small string access function.") {
+string givenEscherichiaColi() {
+    std::ifstream input("../tests/resources/ecoli.txt");
+    std::string ecoli;
+
+    for (std::string line; std::getline(input, line);) {
+        ecoli += line;
+    }
+
+    return ecoli;
+}
+
+SCENARIO("Test Wavelet creation with wrong input") {
+    GIVEN("An empty string") {
+        string givenEmptyString;
+        WHEN("Creating wavelet tree with empty string") {
+            THEN("Wavelet throws") {
+                REQUIRE_THROWS_AS(Wavelet(givenEmptyString), invalid_argument);
+            }
+        }
+    }
+
+    GIVEN("One different character") {
+        string givenOneDifferentCharacter = "aa";
+        WHEN("Creating wavelet tree with one character") {
+            THEN("Wavelet throws") {
+                REQUIRE_THROWS_AS(Wavelet(givenOneDifferentCharacter), invalid_argument);
+            }
+        }
+    }
+}
+
+SCENARIO("Test Wavelet creation with correct input") {
+    GIVEN("A small string") {
+        string givenSmallString = "ab";
+        WHEN("Creating wavelet tree with empty string") {
+            THEN("Wavelet doesn't throw") {
+                REQUIRE_NOTHROW(Wavelet(givenSmallString));
+            }
+        }
+    }
+
+    GIVEN("E. Coli") {
+        string givenEColi = givenEscherichiaColi();
+        WHEN("Creating wavelet tree with one character") {
+            THEN("Wavelet doesn't throw") {
+                REQUIRE_NOTHROW(Wavelet(givenEColi));
+            }
+        }
+    }
+}
+
+SCENARIO("Test access function") {
     GIVEN("Wavelet tree with small string") {
         string givenSmallString = "mississippi";
         Wavelet givenWaveletTree(givenSmallString);
@@ -18,4 +69,21 @@ SCENARIO("Test small string access function.") {
             }
         }
     }
+
+    /*GIVEN("Wavelet tree with large string") {
+        string givenLargeString = givenEscherichiaColi();
+        Wavelet givenWaveletTree(givenLargeString);
+
+        string output;
+        WHEN("Access queries are run") {
+            output += givenWaveletTree.access(465793);
+            for (int i = 0; i < givenLargeString.size(); ++i) {
+                output += givenWaveletTree.access(i);
+            }
+
+            THEN("Output is equal to givenLargeString") {
+                REQUIRE(output == givenLargeString);
+            }
+        }
+    }*/
 }
