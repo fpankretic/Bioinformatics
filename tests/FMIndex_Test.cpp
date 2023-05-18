@@ -6,7 +6,6 @@ SCENARIO("Test count function with empty pattern.") {
     GIVEN("FM index with string and empty pattern") {
         string givenString = "abaaba";
         FMIndex givenFMIndex(givenString);
-
         string givenEmptyPattern = "";
 
         WHEN("Count query is run") {
@@ -21,15 +20,13 @@ SCENARIO("Test count function with short pattern.") {
     GIVEN("FM index with string and short pattern") {
         string givenString = "abaaba";
         FMIndex givenFMIndex(givenString);
-
         string givenShortPattern = "aba";
 
-        int output;
         WHEN("Count query is run") {
-            output = givenFMIndex.count(givenShortPattern);
+            auto actualOutput = givenFMIndex.count(givenShortPattern);
 
             THEN("Output is equal to 2") {
-                REQUIRE(output == 2);
+                REQUIRE(actualOutput == 2);
             }
         }
     }
@@ -39,15 +36,13 @@ SCENARIO("Test count function with long pattern.") {
     GIVEN("FM index with string and long pattern") {
         string givenString = "abaaba";
         FMIndex givenFMIndex(givenString);
-
         string givenLongPattern = "abaaba";
 
-        int output;
         WHEN("Count query is run") {
-            output = givenFMIndex.count(givenLongPattern);
+            auto actualOutput = givenFMIndex.count(givenLongPattern);
 
             THEN("Output is equal to 1") {
-                REQUIRE(output == 1);
+                REQUIRE(actualOutput == 1);
             }
         }
     }
@@ -57,7 +52,6 @@ SCENARIO("Test locate function with empty pattern.") {
     GIVEN("FM index with string and empty pattern") {
         string givenString = "abaaba";
         FMIndex givenFMIndex(givenString);
-
         string givenEmptyPattern = "";
 
         WHEN("Locate query is run") {
@@ -72,16 +66,14 @@ SCENARIO("Test locate function with short pattern.") {
     GIVEN("FM index with string and short pattern") {
         string givenString = "abaaba";
         FMIndex givenFMIndex(givenString);
-
         string givenShortPattern = "aba";
 
-        vector<int> output;
-        vector<int> expected = {0, 3};
         WHEN("Count query is run") {
-            output = givenFMIndex.locate(givenShortPattern);
+            auto actualOutput = givenFMIndex.locate(givenShortPattern);
 
+            vector<int> expectedOutput = {0, 3};
             THEN("Output is equal to vector<int> {0, 3}") {
-                REQUIRE(output == expected);
+                REQUIRE(actualOutput == expectedOutput);
             }
         }
     }
@@ -91,16 +83,14 @@ SCENARIO("Test locate function with long pattern.") {
     GIVEN("FM index with string and long pattern") {
         string givenString = "abaaba";
         FMIndex givenFMIndex(givenString);
-
         string givenLongPattern = "abaaba";
 
-        vector<int> output;
-        vector<int> expected = {0};
         WHEN("Count query is run") {
-            output = givenFMIndex.locate(givenLongPattern);
+            auto actualOutput = givenFMIndex.locate(givenLongPattern);
 
+            vector<int> expectedOutput = {0};
             THEN("Output is equal to to vector<int> {0}") {
-                REQUIRE(output == expected);
+                REQUIRE(actualOutput == expectedOutput);
             }
         }
     }

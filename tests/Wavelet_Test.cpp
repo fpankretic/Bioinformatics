@@ -106,21 +106,21 @@ SCENARIO("Test rank function") {
         Wavelet givenWaveletTree(givenSmallString);
 
         WHEN("Rank is ran in expected range") {
-            int actualAmount = givenWaveletTree.rank('a',0);
+            auto actualAmount = givenWaveletTree.rank('a',0);
             THEN("ActualAmount is equal to 0") {
                 REQUIRE(actualAmount == 0);
             }
         }
 
         WHEN("Rank is ran in expected range") {
-            int actualAmount = givenWaveletTree.rank('a',2);
+            auto actualAmount = givenWaveletTree.rank('a',2);
             THEN("ActualAmount is equal to 1") {
                 REQUIRE(actualAmount == 1);
             }
         }
 
         WHEN("Rank is ran in expected range") {
-            int actualAmount = givenWaveletTree.rank('b',1);
+            auto actualAmount = givenWaveletTree.rank('b',1);
             THEN("ActualAmount is equal to 0") {
                 REQUIRE(actualAmount == 0);
             }
@@ -144,14 +144,14 @@ SCENARIO("Test rank function") {
         }
 
         WHEN("Rank is given starting letter at index after") {
-            int actualAmount = givenWaveletTree.rank('m',1);
+            auto actualAmount = givenWaveletTree.rank('m',1);
             THEN("ActualAmount is equal to 1") {
                 REQUIRE(actualAmount == 1);
             }
         }
 
         WHEN("Rank is given middle letter right at its 3rd index") {
-            int actualAmount = givenWaveletTree.rank('s',5);
+            auto actualAmount = givenWaveletTree.rank('s',5);
             THEN("ActualAmount is equal to 2") {
                 REQUIRE(actualAmount == 2);
             }
