@@ -32,9 +32,7 @@ void Wavelet::build(const string &str) {
 }
 
 void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, const string &label) {
-    auto lr = get_alphabets(alphas);
-    vector<char> left = get<0>(lr);
-    vector<char> right = get<1>(lr);
+    auto [left, right] = get_alphabets(alphas);
 
     unordered_set<char> set(right.begin(), right.end());
     bit_vector *v = root->vector;

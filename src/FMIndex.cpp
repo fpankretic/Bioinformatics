@@ -50,7 +50,7 @@ int FMIndex::count(const string& pattern) {
 vector<int> FMIndex::locate(const string& pattern) {
     auto [top, bottom] = match(pattern);
 
-    vector<int> offsets = {};
+    vector<int> offsets;
 
     if (top < bottom) {
         for (int i = top; i < bottom; ++i) {
