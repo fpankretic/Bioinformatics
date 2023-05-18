@@ -122,11 +122,12 @@ char Wavelet::access(unsigned long i) {
     while (n->chr == 0) {
         bool b = (*n->vector)[i];
 
+        i = myRank(n, b, i);
         if (!b) {
-            i = (int) n->rank0(i);
+            //i = (int) n->rank0(i);
             n = n->left;
         } else {
-            i = (int) n->rank1(i);
+            //i = (int) n->rank1(i);
             n = n->right;
         }
     }
