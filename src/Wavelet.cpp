@@ -82,6 +82,14 @@ void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, co
     build_impl(new_right_node, new_right_str, right, label + '1');
 }
 
+Node* Wavelet::get_start(void) {
+    return start;
+}
+
+map<char, int> Wavelet::get_char_map(void) {
+    return char_map;
+}
+
 char Wavelet::access(int i) {
     Node *n = start;
 
@@ -100,7 +108,7 @@ char Wavelet::access(int i) {
     return n->chr;
 }
 
-int Wavelet::rank(char x, int i) {
+int Wavelet::rank(const char x, int i) {
     Node *n = start;
     int k = 0;
 
@@ -120,7 +128,7 @@ int Wavelet::rank(char x, int i) {
     return i;
 }
 
-int Wavelet::select(char x, int i) {
+int Wavelet::select(const char x, int i) {
     Node *n = start;
     int k = 0;
 
@@ -152,56 +160,6 @@ int Wavelet::select(char x, int i) {
     }
 
     return i;
-}
-
-pair<int, int> *Wavelet::match(string &p) {
-    int top = 0;
-    int bottom = (int) start->vector->size();
-
-    int i = (int) p.length() - 1;
-
-    while (i >= 0 && bottom > top) {
-        char c = p[i];
-        top = char_map[c] + rank(c, top);
-        bottom = char_map[c] + rank(c, bottom);
-
-        i = i - 1;
-    }
-
-    auto *top_bottom = new pair<int, int>;
-    top_bottom->first = top;
-    top_bottom->second = bottom;
-
-    return top_bottom;
-}
-
-int Wavelet::count(string &p) {
-    pair<int, int> *top_bottom = match(p);
-    int top = top_bottom->first;
-    int bottom = top_bottom->second;
-
-    if (top >= bottom) {
-        return 0;
-    }
-
-    return bottom - top;
-}
-
-vector<int> *Wavelet::locate(string &p, vector<int> &sa) {
-    pair<int, int> *top_bottom = match(p);
-    int top = top_bottom->first;
-    int bottom = top_bottom->second;
-
-    auto *offsets = new vector<int>;
-
-    if (top < bottom) {
-        for (int i = top; i < bottom; ++i) {
-            offsets->push_back(sa[i]);
-        }
-    }
-
-    sort(offsets->begin(), offsets->end());
-    return offsets;
 }
 
 void Wavelet::print() {

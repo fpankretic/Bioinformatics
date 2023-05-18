@@ -66,13 +66,12 @@ private:
 
 public:
     explicit Wavelet(const string& str);
+    Node* get_start(void);
+    map<char, int> get_char_map(void);
     void build(const string& str);
     char access(int i);
-    int rank(char x, int i);
-    int select(char x, int i);
-    pair<int, int>* match(string& p);
-    int count(string& p);
-    vector<int>* locate(string& p, vector<int>& sa);
+    int rank(const char x, int i);
+    int select(const char x, int i);
     void print();
 };
 

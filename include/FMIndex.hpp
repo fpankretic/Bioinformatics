@@ -16,8 +16,9 @@ private:
 
 public:
     explicit FMIndex(const string& input);
-    int count(string& p);
-    vector<int>* locate(string& p);
+    pair<int, int> match(const string& p);
+    int count(const string& p);
+    vector<int> locate(const string& p);
     void print_suffix_array();
     void print_pattern_offsets(string& pattern);
 };
