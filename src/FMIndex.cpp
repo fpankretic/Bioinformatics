@@ -21,6 +21,8 @@ FMIndex::FMIndex(const string &input) {
 }
 
 pair<int, int> FMIndex::match(const string& pattern) {
+    assert(!pattern.empty());
+
     int top = 0;
     int bottom = (int) wavelet_tree->get_start()->vector->size();
 
