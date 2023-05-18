@@ -20,12 +20,46 @@ FMIndex::FMIndex(const std::string &input) {
     wavelet_tree = new Wavelet(bwt);
 }
 
-int FMIndex::count(string &pattern) {
-    return wavelet_tree->count(pattern);
+pair<int, int> FMIndex::match(const string& pattern) {
+    int top = 0;
+    int bottom = (int) wavelet_tree->get_start()->vector->size();
+
+    int i = (int) pattern.length() - 1;
+
+    while (i >= 0 && bottom > top) {
+        char c = pattern[i];
+        top = wavelet_tree->get_char_map()[c] + wavelet_tree->rank(c, top);
+        bottom = wavelet_tree->get_char_map()[c] + wavelet_tree->rank(c, bottom);
+
+        i = i - 1;
+    }
+
+    return {top, bottom};
 }
 
-vector<int>* FMIndex::locate(string &pattern) {
-    return wavelet_tree->locate(pattern, suffix_array);
+int FMIndex::count(const string& pattern) {
+    auto [top, bottom] = match(pattern);
+
+    if (top >= bottom) {
+        return 0;
+    }
+
+    return bottom - top;
+}
+
+vector<int> FMIndex::locate(const string& pattern) {
+    auto [top, bottom] = match(pattern);
+
+    vector<int> offsets;
+
+    if (top < bottom) {
+        for (int i = top; i < bottom; ++i) {
+            offsets.push_back(suffix_array[i]);
+        }
+    }
+
+    sort(offsets.begin(), offsets.end());
+    return offsets;
 }
 
 void FMIndex::print_suffix_array() {
@@ -36,11 +70,11 @@ void FMIndex::print_suffix_array() {
     cout << endl;
 }
 
-void FMIndex::print_pattern_offsets(string& pattern) {
-    vector<int>* occs = locate(pattern);
-    if (!occs->empty()) {
+void FMIndex::print_pattern_offsets(const string& pattern) {
+    vector<int> occs = locate(pattern);
+    if (!occs.empty()) {
         cout << endl << "Offsets of pattern in text: " << endl;
-        for (int offset: *occs) {
+        for (int offset: occs) {
             cout << "Offset: " << offset << endl;
         }
     }
