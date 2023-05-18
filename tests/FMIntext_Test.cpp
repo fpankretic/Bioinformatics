@@ -2,23 +2,20 @@
 
 #include "../include/FMIndex.hpp"
 
-// SCENARIO("Test count function with empty pattern.") {
-//     GIVEN("FM index with string and empty pattern") {
-//         string givenString = "abaaba";
-//         FMIndex givenFMIndex(givenString);
+SCENARIO("Test count function with empty pattern.") {
+    GIVEN("FM index with string and empty pattern") {
+        string givenString = "abaaba";
+        FMIndex givenFMIndex(givenString);
 
-//         string givenEmptyPattern = "";
+        string givenEmptyPattern = "";
 
-//         int output;
-//         WHEN("Count query is run") {
-//             output = givenFMIndex.count(givenEmptyPattern);
-
-//             THEN("Output is equal to 0") {
-//                 REQUIRE(output == 0);
-//             }
-//         }
-//     }
-// }
+        WHEN("Count query is run") {
+            THEN("Count throws invalid_argument") {
+                REQUIRE_THROWS_AS(givenFMIndex.count(givenEmptyPattern), invalid_argument);
+            }
+        }
+    }
+}
 
 SCENARIO("Test count function with short pattern.") {
     GIVEN("FM index with string and short pattern") {
@@ -56,23 +53,20 @@ SCENARIO("Test count function with long pattern.") {
     }
 }
 
-// SCENARIO("Test locate function with empty pattern.") {
-//     GIVEN("FM index with string and empty pattern") {
-//         string givenString = "abaaba";
-//         FMIndex givenFMIndex(givenString);
+SCENARIO("Test locate function with empty pattern.") {
+    GIVEN("FM index with string and empty pattern") {
+        string givenString = "abaaba";
+        FMIndex givenFMIndex(givenString);
 
-//         string givenEmptyPattern = "";
+        string givenEmptyPattern = "";
 
-//         vector<int> output;
-//         WHEN("Locate query is run") {
-//             output = givenFMIndex.locate(givenEmptyPattern);
-
-//             THEN("Output vector length is equal to 0") {
-//                 REQUIRE(output.size() == 0);
-//             }
-//         }
-//     }
-// }
+        WHEN("Locate query is run") {
+            THEN("Locate throws invalid_argument") {
+                REQUIRE_THROWS_AS(givenFMIndex.locate(givenEmptyPattern), invalid_argument);
+            }
+        }
+    }
+}
 
 SCENARIO("Test locate function with short pattern.") {
     GIVEN("FM index with string and short pattern") {
