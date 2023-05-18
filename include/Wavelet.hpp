@@ -7,7 +7,6 @@
 
 #include <sdsl/bit_vectors.hpp>
 #include <iostream>
-#include <unordered_set>
 #include <queue>
 
 using namespace std;
@@ -46,7 +45,6 @@ private:
     Node* start;
     map<char, int> char_map;
     unordered_map<char, string> labels;
-    unordered_set<char> alphabet;
 
 private:
     void build_impl(Node* root, const string& str, vector<char>& alphas, const string& label = "");
@@ -66,12 +64,12 @@ private:
 
 public:
     explicit Wavelet(const string& str);
-    Node* get_start(void);
-    map<char, int> get_char_map(void);
+    Node* get_start();
+    map<char, int> get_char_map();
     void build(const string& str);
     char access(int i);
-    int rank(const char x, int i);
-    int select(const char x, int i);
+    int rank(char x, int i);
+    int select(char x, int i);
     void print();
 };
 

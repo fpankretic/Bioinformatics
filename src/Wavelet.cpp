@@ -2,6 +2,8 @@
 // Created by fpankretic on 5/1/23.
 //
 
+#include <unordered_set>
+
 #include "../include/Wavelet.hpp"
 
 Wavelet::Wavelet(const string &str) {
@@ -10,6 +12,7 @@ Wavelet::Wavelet(const string &str) {
 }
 
 void Wavelet::build(const string &str) {
+    unordered_set<char> alphabet;
     for (const auto &item: str) {
         alphabet.insert(item);
         if (char_map.find(item) == char_map.end()) {
@@ -80,11 +83,11 @@ void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, co
     build_impl(new_right_node, new_right_str, right, label + '1');
 }
 
-Node* Wavelet::get_start(void) {
+Node* Wavelet::get_start() {
     return start;
 }
 
-map<char, int> Wavelet::get_char_map(void) {
+map<char, int> Wavelet::get_char_map() {
     return char_map;
 }
 
