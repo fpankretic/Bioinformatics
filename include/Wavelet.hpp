@@ -16,19 +16,19 @@ struct Node {
     Node* parent = nullptr;
     Node* left = nullptr;
     Node* right = nullptr;
+
+    // this was NodeWithVector
     bit_vector* vector;
     rank_support_v<0,1> rank0;
     rank_support_v<1,1> rank1;
     select_support_mcl<0,1> select0;
     select_support_mcl<1,1> select1;
+
+    // this was Leaf
     char chr = 0;
 
     explicit Node(const string& str) {
         vector = new bit_vector(str.length(), 0);
-        rank0 = rank_support_v<0,1>(vector);
-        rank1 = rank_support_v<1,1>(vector);
-        select0 = select_support_mcl<0,1>();
-        select1 = select_support_mcl<1,1>();
     }
 
     explicit Node(char c) {
@@ -38,6 +38,7 @@ struct Node {
         vector = nullptr;
         chr = c;
     }
+
 };
 
 class Wavelet {

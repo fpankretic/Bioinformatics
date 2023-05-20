@@ -58,14 +58,14 @@ SCENARIO("Test access function") {
         string givenSmallString = "mississippi";
         Wavelet givenWaveletTree(givenSmallString);
 
-        string output;
+        string actual_output;
         WHEN("Access queries are run") {
             for (int i = 0; i < givenSmallString.length(); ++i) {
-                output += givenWaveletTree.access(i);
+                actual_output += givenWaveletTree.access(i);
             }
 
             THEN("Output is equal to givenSmallString") {
-                REQUIRE(output == givenSmallString);
+                REQUIRE(actual_output == givenSmallString);
             }
         }
     }
@@ -74,28 +74,15 @@ SCENARIO("Test access function") {
         string givenLargeString = givenEscherichiaColi();
         Wavelet givenWaveletTree(givenLargeString);
 
-        string output;
+        string actual_output;
         WHEN("Access queries are run") {
-            /*output += givenWaveletTree.access(420000);
-            output += givenWaveletTree.access(450000);
-            output += givenWaveletTree.access(465790);
-            output += givenWaveletTree.access(465791);*/
-
-            output += givenWaveletTree.access(465792);
-            cout << output << endl;
-            cout << givenLargeString.at(465792) << endl;
-            output += givenWaveletTree.access(465793);
-            cout << output << endl;
-            cout << givenLargeString.at(465793) << endl;
-            // this just show that our tree is correct and out simple rank works
-
-            /*for (int i = 0; i < 465789; ++i) {
-                output += givenWaveletTree.access(i);
+            for (int i = 0; i < givenLargeString.length(); ++i) {
+                actual_output += givenWaveletTree.access(i);
             }
 
             THEN("Output is equal to givenLargeString") {
-                REQUIRE(output == givenLargeString.substr(0,465788));
-            }*/
+                REQUIRE(actual_output == givenLargeString);
+            }
         }
     }
 }

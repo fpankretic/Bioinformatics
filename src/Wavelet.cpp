@@ -27,7 +27,7 @@ void Wavelet::build(const string &str) {
     }
 
     int prev_cnt = 0;
-    for (auto item: char_map) {
+    for (const auto &item: char_map) {
         int temp = item.second + prev_cnt;
         char_map[item.first] = prev_cnt;
         prev_cnt = temp;
@@ -41,14 +41,23 @@ void Wavelet::build(const string &str) {
 void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, const string &label) {
     auto [left, right] = get_alphabets(alphas);
 
-    unordered_set<char> set(right.begin(), right.end());
-    bit_vector *v = root->vector;
+    unordered_set<char> right_character_set(right.begin(), right.end());
+    bit_vector *bit_vector = root->vector;
     for (int i = 0; i < str.size(); ++i) {
-        if (set.contains(str[i])) {
-            (*v)[i] = true;
+        if (right_character_set.contains(str[i])) {
+            (*bit_vector)[i] = true;
         }
     }
 
+    root->rank0 = rank_support_v<0,1>(bit_vector);
+    root->rank1 = rank_support_v<1,1>(bit_vector);
+    root->select0 = select_support_mcl<0,1>();
+    root->select1 = select_support_mcl<1,1>();
+
+    // TODO: node.initialize();
+    // TODO: try to return newly created node
+
+    // we finish if we are here
     char c;
     if (right.size() == 1) {
         assert(left.size() <= 1);
@@ -70,7 +79,7 @@ void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, co
     string new_left_str;
     string new_right_str;
     for (const auto &item: str) {
-        if (set.contains(item)) {
+        if (right_character_set.contains(item)) {
             new_right_str += item;
         } else {
             new_left_str += item;
@@ -96,38 +105,17 @@ map<char, int> Wavelet::get_char_map() {
     return char_map;
 }
 
-int myRank(Node* n, bool c, unsigned long offset) {
-    bit_vector b = (*n->vector);
-    if (offset >= b.size()) {
-        throw invalid_argument("Offset must be smaller than size of bitvector.");
-    }
-    int cnt = 0;
-    for (int i = 0; i < b.size(); ++i) {
-        if (i == offset) {
-            return cnt;
-        }
-        if (b[i] == c) {
-            cnt++;
-        }
-    }
-}
-
 char Wavelet::access(unsigned long i) {
     Node *n = start;
-
-    /*if(i == 465793) {
-        int a = 1;
-    }*/
 
     while (n->chr == 0) {
         bool b = (*n->vector)[i];
 
-        i = myRank(n, b, i);
         if (!b) {
-            //i = (int) n->rank0(i);
+            i = (int) n->rank0(i);
             n = n->left;
         } else {
-            //i = (int) n->rank1(i);
+            i = (int) n->rank1(i);
             n = n->right;
         }
     }
