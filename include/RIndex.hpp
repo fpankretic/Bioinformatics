@@ -15,8 +15,8 @@ private:
 public:
     explicit RIndex(const string& input);
     map<char, map<int, int>> get_predecessor_struct();
-    int pred(char c, int offset);
-    pair<int, int> match(const string& pattern);
+    pair<int, int> pred(char c, int offset);
+    tuple<int> match(const string& pattern);
     int count(const string& pattern);
     vector<int> locate(const string& pattern);
     void print_suffix_array();

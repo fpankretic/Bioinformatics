@@ -54,19 +54,17 @@ map<char, map<int, int>> RIndex::get_predecessor_struct() {
     return predecessor_struct;
 }
 
-int RIndex::pred(char c, int offset) {
+pair<int, int> RIndex::pred(char c, int offset) {
     map<int, int> curr_char_map = predecessor_struct[c];
 
     for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
         if (it->first <= offset) {
-            return it->second;
+            return {it->first, it->second};
         }
     }
-
-    return -1;
 }
 
-pair<int, int> RIndex::match(const string& pattern) {
+tuple<int> RIndex::match(const string& pattern) {
     if (pattern.empty()) {
         throw invalid_argument("Pattern must be at least one character.");
     }
@@ -83,9 +81,13 @@ pair<int, int> RIndex::match(const string& pattern) {
     while (i >= 0 && bottom > top) {
         char c = pattern[i];
         if (first) {
-            text_offset = pred(c, text_len - 1);
-            bwt_offset = text_len - 1;
+            auto [bwt_offset, text_offset] = pred(c, text_len - 1);
             first = false;
+        } else if (wavelet_tree.access(bwt_offset) == c) {
+            text_offset -= 1;
+            bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c , bwt_offset);
+        } else {
+            auto [bwt_offset, text_offset] = pred(c, bottom - 1);
         }
         top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
         bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
@@ -93,11 +95,11 @@ pair<int, int> RIndex::match(const string& pattern) {
         i = i - 1;
     }
 
-    return {top, bottom};
+    return {top, bottom, bwt_offset, text_offset};
 }
 
 int RIndex::count(const string& pattern) {
-    auto [top, bottom] = match(pattern);
+    auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
     if (top >= bottom) {
         return 0;
@@ -107,7 +109,7 @@ int RIndex::count(const string& pattern) {
 }
 
 vector<int> RIndex::locate(const string& pattern) {
-    auto [top, bottom] = match(pattern);
+    auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
     vector<int> offsets;
 
