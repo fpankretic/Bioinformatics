@@ -45,7 +45,7 @@ SCENARIO("Test Wavelet creation with correct input") {
 
     GIVEN("E. Coli") {
         string given_E_Coli = given_Escherichia_Coli();
-        WHEN("Creating wavelet tree with one character") {
+        WHEN("Creating wavelet tree with more than one character") {
             THEN("Wavelet doesn't throw") {
                 REQUIRE_NOTHROW(Wavelet(given_E_Coli));
             }
@@ -144,6 +144,4 @@ SCENARIO("Test rank function") {
             }
         }
     }
-
-    // TODO: Add tests for large if fixed
 }

@@ -1,10 +1,9 @@
 #include <unordered_set>
-#include <exception>
 
 #include "../include/Wavelet.hpp"
 
 Wavelet::Wavelet(const string &str) {
-    start = new Node(str);
+    start = make_shared<Node>();
     build(str);
 }
 
@@ -34,24 +33,17 @@ void Wavelet::build(const string &str) {
     build_impl(start, str, alphas);
 }
 
-void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, const string &label) {
+void Wavelet::build_impl(const shared_ptr<Node>& root, const string &str, vector<char> &alphas, const string &label) {
     auto [left, right] = get_alphabets(alphas);
 
     unordered_set<char> right_character_set(right.begin(), right.end());
-    bit_vector *bit_vector = root->vector;
+    bit_vector b_vector(str.size(), 0);
     for (int i = 0; i < str.size(); ++i) {
         if (right_character_set.contains(str[i])) {
-            (*bit_vector)[i] = true;
+            b_vector[i] = true;
         }
     }
-
-    root->rank0 = rank_support_v<0,1>(bit_vector);
-    root->rank1 = rank_support_v<1,1>(bit_vector);
-    root->select0 = select_support_mcl<0,1>();
-    root->select1 = select_support_mcl<1,1>();
-
-    // TODO: node.initialize();
-    // TODO: try to return newly created node
+    root->construct_vector(b_vector);
 
     // we finish if we are here
     char c;
@@ -59,13 +51,13 @@ void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, co
         assert(left.size() <= 1);
         if (left.size() == 1) {
             c = left[0];
-            Node *left_child = new Node(c);
+            auto left_child = make_shared<Node>(c);
             left_child->parent = root;
             root->left = left_child;
             labels.insert({c, label + '0'});
         }
         c = right[0];
-        Node *right_child = new Node(c);
+        auto right_child = make_shared<Node>(c);
         right_child->parent = root;
         root->right = right_child;
         labels.insert({c, label + '1'});
@@ -82,18 +74,18 @@ void Wavelet::build_impl(Node *root, const string &str, vector<char> &alphas, co
         }
     }
 
-    Node *new_left_node = new Node(new_left_str);
+    shared_ptr<Node> new_left_node = make_shared<Node>();
     new_left_node->parent = root;
     root->left = new_left_node;
     build_impl(new_left_node, new_left_str, left, label + '0');
 
-    Node *new_right_node = new Node(new_right_str);
+    shared_ptr<Node> new_right_node = make_shared<Node>();;
     new_right_node->parent = root;
     root->right = new_right_node;
     build_impl(new_right_node, new_right_str, right, label + '1');
 }
 
-Node* Wavelet::get_start() {
+shared_ptr<Node> Wavelet::get_start() {
     return start;
 }
 
@@ -101,57 +93,57 @@ map<char, int> Wavelet::get_char_map() {
     return char_map;
 }
 
-char Wavelet::access(unsigned long i) {
-    Node *n = start;
+char Wavelet::access(unsigned long index) {
+    shared_ptr<Node> node = start;
 
-    while (n->chr == 0) {
-        bool b = (*n->vector)[i];
+    while (node->chr == 0) {
+        bool bit = (node->b_vector)[index];
 
-        if (!b) {
-            i = (int) n->rank0(i);
-            n = n->left;
+        if (!bit) {
+            index = (int) node->rank0(index);
+            node = node->left;
         } else {
-            i = (int) n->rank1(i);
-            n = n->right;
+            index = (int) node->rank1(index);
+            node = node->right;
         }
     }
 
-    return n->chr;
+    return node->chr;
 }
 
-int Wavelet::rank(const char x, int i) {
-    Node *n = start;
+int Wavelet::rank(const char character, int index) {
+    auto node = start;
     int k = 0;
 
-    if (i > n->vector->size() || labels.find(x) == labels.end() ) {
+    if (index > node->b_vector.size() || labels.find(character) == labels.end() ) {
         throw invalid_argument("Given input is invalid.");
     }
 
-    while (n->chr == 0) {
-        char b = labels[x][k];
+    while (node->chr == 0) {
+        char b = labels[character][k];
         if (b == '0') {
-            i = (int) n->rank0(i);
-            n = n->left;
+            index = (int) node->rank0(index);
+            node = node->left;
         } else {
-            i = (int) n->rank1(i);
-            n = n->right;
+            index = (int) node->rank1(index);
+            node = node->right;
         }
 
-        k = k + 1;
+        k++;
     }
 
-    return i;
+    return index;
 }
 
 void Wavelet::print() {
-    queue<pair<Node *, int>> open;
+    queue<pair<shared_ptr<Node>, int>> open;
     open.emplace(start, 0);
 
     while (!open.empty()) {
-        pair<Node *, int> curr = open.front();
+        pair<shared_ptr<Node>, int> curr = open.front();
         open.pop();
 
-        Node *curr_node = curr.first;
+        shared_ptr<Node> curr_node = curr.first;
         int curr_depth = curr.second;
 
         if (curr_node->left != nullptr)
@@ -164,8 +156,8 @@ void Wavelet::print() {
             dpth += "-";
         }
 
-        if (curr_node->vector != nullptr) {
-            cout << dpth << *(curr_node->vector) << endl;
+        if (!curr_node->b_vector.empty()) {
+            cout << dpth << curr_node->b_vector << endl;
         } else {
             cout << dpth << curr_node->chr << endl;
         }

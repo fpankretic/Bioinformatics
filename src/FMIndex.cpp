@@ -22,7 +22,7 @@ pair<int, int> FMIndex::match(const string& pattern) {
     }
 
     int top = 0;
-    int bottom = (int) wavelet_tree.get_start()->vector->size();
+    int bottom = (int) wavelet_tree.get_start()->b_vector.size();
 
     int i = (int) pattern.length() - 1;
 

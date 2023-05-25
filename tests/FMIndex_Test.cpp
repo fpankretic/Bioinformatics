@@ -89,7 +89,7 @@ SCENARIO("Test locate function with long pattern.") {
             auto actual_output = given_FM_index.locate(given_long_pattern);
 
             vector<int> expected_output = {0};
-            THEN("Output is equal to to vector<int> {0}") {
+            THEN("Output is equal to vector<int> {0}") {
                 REQUIRE(actual_output == expected_output);
             }
         }
