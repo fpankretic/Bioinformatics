@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-    string input = "misssisssippi";
+    string input = "mississippi";
     Wavelet tree(input);
 
     cout << "Wavelet tree: " << endl;
@@ -16,10 +16,11 @@ int main() {
 
     FMIndex fm_index(input);
     fm_index.print_suffix_array();
-    fm_index.print_pattern_offsets("ssis");
+    fm_index.print_pattern_offsets("ss");
 
-    // cout << input << endl;
-    // RIndex r_index(input);
+    cout << input << endl;
+    RIndex r_index(input);
+    cout << r_index.count("ss") << endl;
     // for (const auto& item: r_index.get_predecessor_struct()) {
     //     cout << "Pred struct for char " << item.first << endl;
     //     for (const auto& curr: item.second) {

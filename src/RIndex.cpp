@@ -14,6 +14,9 @@ RIndex::RIndex(const string &input) {
         }
     }
 
+    cout << "SA: " << suffix_array << endl;
+    cout << "BWT: " << bwt << endl;
+
     text_len = bwt.size();
 
     char curr = '\0';
@@ -62,9 +65,11 @@ pair<int, int> RIndex::pred(char c, int offset) {
             return {it->first, it->second};
         }
     }
+
+    return {-1, -1};
 }
 
-tuple<int> RIndex::match(const string& pattern) {
+tuple<int, int, int, int> RIndex::match(const string& pattern) {
     if (pattern.empty()) {
         throw invalid_argument("Pattern must be at least one character.");
     }
@@ -81,18 +86,23 @@ tuple<int> RIndex::match(const string& pattern) {
     while (i >= 0 && bottom > top) {
         char c = pattern[i];
         if (first) {
-            auto [bwt_offset, text_offset] = pred(c, text_len - 1);
+            auto temp_tuple = pred(c, text_len - 1);
+            tie(bwt_offset, text_offset) = temp_tuple;
             first = false;
         } else if (wavelet_tree.access(bwt_offset) == c) {
+            cout << "here" << endl;
             text_offset -= 1;
             bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c , bwt_offset);
         } else {
-            auto [bwt_offset, text_offset] = pred(c, bottom - 1);
+            auto temp_tuple = pred(c, bottom - 1);
+            tie(bwt_offset, text_offset) = temp_tuple;
         }
         top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
         bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
 
         i = i - 1;
+
+        cout << "Text offset: " << text_offset << " BWT offset: " << bwt_offset << endl;
     }
 
     return {top, bottom, bwt_offset, text_offset};
@@ -104,6 +114,8 @@ int RIndex::count(const string& pattern) {
     if (top >= bottom) {
         return 0;
     }
+
+    cout << "Text offset: " << text_offset << endl;
 
     return bottom - top;
 }
