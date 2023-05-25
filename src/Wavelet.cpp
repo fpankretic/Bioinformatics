@@ -1,7 +1,3 @@
-//
-// Created by fpankretic on 5/1/23.
-//
-
 #include <unordered_set>
 #include <exception>
 

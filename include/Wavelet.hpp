@@ -1,7 +1,3 @@
-//
-// Created by fpankretic on 4/30/23.
-//
-
 #ifndef BIOINFORMATICS_WAVELET_HPP
 #define BIOINFORMATICS_WAVELET_HPP
 

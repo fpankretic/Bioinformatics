@@ -1,7 +1,3 @@
-//
-// Created by fpankretic on 5/1/23.
-//
-
 #ifndef BIOINFORMATICS_FMINDEX_HPP
 #define BIOINFORMATICS_FMINDEX_HPP
 
@@ -12,7 +8,7 @@
 class FMIndex {
 private:
     vector<int> suffix_array;
-    Wavelet* wavelet_tree;
+    Wavelet wavelet_tree = Wavelet("abc");
 
 public:
     explicit FMIndex(const string& input);
