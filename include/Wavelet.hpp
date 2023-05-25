@@ -1,54 +1,47 @@
-//
-// Created by fpankretic on 4/30/23.
-//
-
 #ifndef BIOINFORMATICS_WAVELET_HPP
 #define BIOINFORMATICS_WAVELET_HPP
 
 #include <sdsl/bit_vectors.hpp>
 #include <iostream>
 #include <queue>
+#include <utility>
 
 using namespace std;
 using namespace sdsl;
 
 struct Node {
-    Node* parent = nullptr;
-    Node* left = nullptr;
-    Node* right = nullptr;
+    shared_ptr<Node> parent = nullptr;
+    shared_ptr<Node> left = nullptr;
+    shared_ptr<Node> right = nullptr;
 
-    // this was NodeWithVector
-    bit_vector* vector;
+    bit_vector b_vector;
     rank_support_v<0,1> rank0;
     rank_support_v<1,1> rank1;
-    select_support_mcl<0,1> select0;
-    select_support_mcl<1,1> select1;
 
-    // this was Leaf
     char chr = 0;
 
-    explicit Node(const string& str) {
-        vector = new bit_vector(str.length(), 0);
-    }
+    explicit Node() = default;
 
     explicit Node(char c) {
-        parent = nullptr;
-        left = nullptr;
-        right = nullptr;
-        vector = nullptr;
         chr = c;
+    }
+
+    void construct_vector(bit_vector vec) {
+        this->b_vector = std::move(vec);
+        this->rank0 = rank_support_v<0,1>(&(this->b_vector));
+        this->rank1 = rank_support_v<1,1>(&(this->b_vector));
     }
 
 };
 
 class Wavelet {
 private:
-    Node* start;
+    shared_ptr<Node> start;
     map<char, int> char_map;
     unordered_map<char, string> labels;
 
 private:
-    void build_impl(Node* root, const string& str, vector<char>& alphas, const string& label = "");
+    void build_impl(const shared_ptr<Node>& root, const string& str, vector<char>& alphas, const string& label = "");
     static tuple<vector<char>,vector<char>> get_alphabets(vector<char>& alphas) {
         vector<char> left;
         vector<char> right;
@@ -65,12 +58,12 @@ private:
 
 public:
     explicit Wavelet(const string& str);
-    Node* get_start();
+    shared_ptr<Node> get_start();
     map<char, int> get_char_map();
     void build(const string& str);
-    char access(unsigned long i);
-    int rank(char x, int i);
+    char access(unsigned long index);
+    int rank(char character, int index);
     void print();
 };
 
-#endif //BIOINFORMATICS_WAVELET_HPP
+#endif

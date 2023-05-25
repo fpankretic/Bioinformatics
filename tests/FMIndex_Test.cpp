@@ -72,7 +72,7 @@ SCENARIO("Test locate function with short pattern.") {
             auto actualOutput = givenFMIndex.locate(givenShortPattern);
 
             vector<int> expectedOutput = {0, 3};
-            THEN("Output is equal to vector<int> {0, 3}") {
+            THEN("Output is equal to b_vector<int> {0, 3}") {
                 REQUIRE(actualOutput == expectedOutput);
             }
         }
@@ -89,7 +89,7 @@ SCENARIO("Test locate function with long pattern.") {
             auto actualOutput = givenFMIndex.locate(givenLongPattern);
 
             vector<int> expectedOutput = {0};
-            THEN("Output is equal to to vector<int> {0}") {
+            THEN("Output is equal to to b_vector<int> {0}") {
                 REQUIRE(actualOutput == expectedOutput);
             }
         }
