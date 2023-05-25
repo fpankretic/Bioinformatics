@@ -13,7 +13,43 @@ RIndex::RIndex(const string &input) {
             bwt += '$';
         }
     }
+
+    cout << bwt << endl;
+
+    char curr = '\0';
+    int run_start = -1;
+
+    for (int i = 0; i < bwt.size(); ++i) {
+        if (bwt[i] != curr) {
+            if (run_start != -1) {
+                if (bwt[i - 1] == '$') {
+                    predecessor_struct.insert({i - 1, bwt.size() - 1});
+                } else {
+                    predecessor_struct.insert({i - 1, suffix_array[i - 1] - 1});
+                }
+            }
+            run_start = i;
+            curr = bwt[i];
+
+            if (bwt[run_start] == '$') {
+                predecessor_struct.insert({run_start, bwt.size() - 1});
+            } else {
+                predecessor_struct.insert({run_start, suffix_array[run_start] - 1});
+            }
+        }
+    }
+    
+    if (bwt[bwt.size() - 1] == '$') {
+        predecessor_struct.insert({bwt.size() - 1, bwt.size() - 1});
+    } else {
+        predecessor_struct.insert({bwt.size() - 1, suffix_array[bwt.size() - 1] - 1});
+    }
+
     wavelet_tree = Wavelet(bwt);
+}
+
+map<int, int> RIndex::get_predecessor_struct() {
+    return predecessor_struct;
 }
 
 pair<int, int> RIndex::match(const string& pattern) {
