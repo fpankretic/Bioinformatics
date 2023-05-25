@@ -21,7 +21,10 @@ int main() {
     // cout << input << endl;
     // RIndex r_index(input);
     // for (const auto& item: r_index.get_predecessor_struct()) {
-    //     cout << "BWT index " << item.first << " Offset " << item.second << endl;
+    //     cout << "Pred struct for char " << item.first << endl;
+    //     for (const auto& curr: item.second) {
+    //         cout << "BWT index " << curr.first << " Offset " << curr.second << endl;
+    //     }
     // }
 
     return 0;
