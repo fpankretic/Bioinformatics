@@ -2,7 +2,7 @@
 
 #include "../include/Wavelet.hpp"
 
-string givenEscherichiaColi() {
+string given_Escherichia_Coli() {
     std::ifstream input("../tests/resources/ecoli.txt");
     std::string ecoli;
 
@@ -15,19 +15,19 @@ string givenEscherichiaColi() {
 
 SCENARIO("Test Wavelet creation with wrong input") {
     GIVEN("An empty string") {
-        string givenEmptyString;
+        string given_empty_string;
         WHEN("Creating wavelet tree with empty string") {
             THEN("Wavelet throws") {
-                REQUIRE_THROWS_AS(Wavelet(givenEmptyString), invalid_argument);
+                REQUIRE_THROWS_AS(Wavelet(given_empty_string), invalid_argument);
             }
         }
     }
 
     GIVEN("One different character") {
-        string givenOneDifferentCharacter = "aa";
+        string given_one_different_character = "aa";
         WHEN("Creating wavelet tree with one character") {
             THEN("Wavelet throws") {
-                REQUIRE_THROWS_AS(Wavelet(givenOneDifferentCharacter), invalid_argument);
+                REQUIRE_THROWS_AS(Wavelet(given_one_different_character), invalid_argument);
             }
         }
     }
@@ -35,19 +35,19 @@ SCENARIO("Test Wavelet creation with wrong input") {
 
 SCENARIO("Test Wavelet creation with correct input") {
     GIVEN("A small string") {
-        string givenSmallString = "ab";
+        string given_small_string = "ab";
         WHEN("Creating wavelet tree with empty string") {
             THEN("Wavelet doesn't throw") {
-                REQUIRE_NOTHROW(Wavelet(givenSmallString));
+                REQUIRE_NOTHROW(Wavelet(given_small_string));
             }
         }
     }
 
     GIVEN("E. Coli") {
-        string givenEColi = givenEscherichiaColi();
+        string given_E_Coli = given_Escherichia_Coli();
         WHEN("Creating wavelet tree with more than one character") {
             THEN("Wavelet doesn't throw") {
-                REQUIRE_NOTHROW(Wavelet(givenEColi));
+                REQUIRE_NOTHROW(Wavelet(given_E_Coli));
             }
         }
     }
@@ -55,33 +55,33 @@ SCENARIO("Test Wavelet creation with correct input") {
 
 SCENARIO("Test access function") {
     GIVEN("Wavelet tree with small string") {
-        string givenSmallString = "mississippi";
-        Wavelet givenWaveletTree(givenSmallString);
+        string given_small_string = "mississippi";
+        Wavelet given_wavelet_tree(given_small_string);
 
         string actual_output;
         WHEN("Access queries are run") {
-            for (int i = 0; i < givenSmallString.length(); ++i) {
-                actual_output += givenWaveletTree.access(i);
+            for (int i = 0; i < given_small_string.length(); ++i) {
+                actual_output += given_wavelet_tree.access(i);
             }
 
             THEN("Output is equal to givenSmallString") {
-                REQUIRE(actual_output == givenSmallString);
+                REQUIRE(actual_output == given_small_string);
             }
         }
     }
 
     GIVEN("Wavelet tree with large string") {
-        string givenLargeString = givenEscherichiaColi();
-        Wavelet givenWaveletTree(givenLargeString);
+        string given_large_string = given_Escherichia_Coli();
+        Wavelet given_wavelet_tree(given_large_string);
 
         string actual_output;
         WHEN("Access queries are run") {
-            for (int i = 0; i < givenLargeString.length(); ++i) {
-                actual_output += givenWaveletTree.access(i);
+            for (int i = 0; i < given_large_string.length(); ++i) {
+                actual_output += given_wavelet_tree.access(i);
             }
 
             THEN("Output is equal to givenLargeString") {
-                REQUIRE(actual_output == givenLargeString);
+                REQUIRE(actual_output == given_large_string);
             }
         }
     }
@@ -89,58 +89,58 @@ SCENARIO("Test access function") {
 
 SCENARIO("Test rank function") {
     GIVEN("Wavelet tree with small string") {
-        string givenSmallString = "ab";
-        Wavelet givenWaveletTree(givenSmallString);
+        string given_small_string = "ab";
+        Wavelet given_wavelet_tree(given_small_string);
 
         WHEN("Rank is ran in expected range") {
-            auto actualAmount = givenWaveletTree.rank('a',0);
-            THEN("ActualAmount is equal to 0") {
-                REQUIRE(actualAmount == 0);
+            auto actual_amount = given_wavelet_tree.rank('a',0);
+            THEN("Actual amount is equal to 0") {
+                REQUIRE(actual_amount == 0);
             }
         }
 
         WHEN("Rank is ran in expected range") {
-            auto actualAmount = givenWaveletTree.rank('a',2);
-            THEN("ActualAmount is equal to 1") {
-                REQUIRE(actualAmount == 1);
+            auto actual_amount = given_wavelet_tree.rank('a',2);
+            THEN("Actual amount is equal to 1") {
+                REQUIRE(actual_amount == 1);
             }
         }
 
         WHEN("Rank is ran in expected range") {
-            auto actualAmount = givenWaveletTree.rank('b',1);
-            THEN("ActualAmount is equal to 0") {
-                REQUIRE(actualAmount == 0);
+            auto actual_amount = given_wavelet_tree.rank('b',1);
+            THEN("Actual amount is equal to 0") {
+                REQUIRE(actual_amount == 0);
             }
         }
 
         WHEN("Rank is ran in out of expected range") {
             THEN("Rank should trow") {
-                REQUIRE_THROWS_AS(givenWaveletTree.rank('a',3), invalid_argument);
+                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',3), invalid_argument);
             }
         }
     }
 
     GIVEN("Wavelet tree with medium string") {
-        string givenMediumString = "mississippi";
-        Wavelet givenWaveletTree(givenMediumString);
+        string given_medium_string = "mississippi";
+        Wavelet given_wavelet_tree(given_medium_string);
 
         WHEN("Rank is given non existing letter") {
             THEN("Rank should throw") {
-                REQUIRE_THROWS_AS(givenWaveletTree.rank('a',givenMediumString.length()) , invalid_argument);
+                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',given_medium_string.length()) , invalid_argument);
             }
         }
 
         WHEN("Rank is given starting letter at index after") {
-            auto actualAmount = givenWaveletTree.rank('m',1);
+            auto actual_amount = given_wavelet_tree.rank('m',1);
             THEN("ActualAmount is equal to 1") {
-                REQUIRE(actualAmount == 1);
+                REQUIRE(actual_amount == 1);
             }
         }
 
         WHEN("Rank is given middle letter right at its 3rd index") {
-            auto actualAmount = givenWaveletTree.rank('s',5);
+            auto actual_amount = given_wavelet_tree.rank('s',5);
             THEN("ActualAmount is equal to 2") {
-                REQUIRE(actualAmount == 2);
+                REQUIRE(actual_amount == 2);
             }
         }
     }

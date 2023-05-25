@@ -1,7 +1,3 @@
-//
-// Created by fpankretic on 5/1/23.
-//
-
 #include "../include/FMIndex.hpp"
 
 FMIndex::FMIndex(const string &input) {
@@ -17,7 +13,7 @@ FMIndex::FMIndex(const string &input) {
             bwt += '$';
         }
     }
-    wavelet_tree = new Wavelet(bwt);
+    wavelet_tree = Wavelet(bwt);
 }
 
 pair<int, int> FMIndex::match(const string& pattern) {
@@ -26,14 +22,14 @@ pair<int, int> FMIndex::match(const string& pattern) {
     }
 
     int top = 0;
-    int bottom = (int) wavelet_tree->get_start()->b_vector.size();
+    int bottom = (int) wavelet_tree.get_start()->b_vector.size();
 
     int i = (int) pattern.length() - 1;
 
     while (i >= 0 && bottom > top) {
         char c = pattern[i];
-        top = wavelet_tree->get_char_map()[c] + wavelet_tree->rank(c, top);
-        bottom = wavelet_tree->get_char_map()[c] + wavelet_tree->rank(c, bottom);
+        top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
+        bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
 
         i = i - 1;
     }
