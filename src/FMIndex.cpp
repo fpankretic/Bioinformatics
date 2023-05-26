@@ -73,7 +73,7 @@ void FMIndex::print_suffix_array() {
 void FMIndex::print_pattern_offsets(const string& pattern) {
     vector<int> occs = locate(pattern);
     if (!occs.empty()) {
-        cout << endl << "Offsets of pattern in text: " << endl;
+        cout << endl << "Offsets of pattern " << pattern << " in text: " << endl;
         for (int offset: occs) {
             cout << "Offset: " << offset << endl;
         }

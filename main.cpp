@@ -16,7 +16,7 @@ int main() {
 
     FMIndex fm_index(input);
     fm_index.print_suffix_array();
-    fm_index.print_pattern_offsets("ss");
+    fm_index.print_pattern_offsets("p");
 
     cout << input << endl;
     RIndex r_index(input);
@@ -27,6 +27,13 @@ int main() {
     //         cout << "BWT index " << curr.first << " Offset " << curr.second << endl;
     //     }
     // }
+
+
+    r_index.print_pattern_offsets("p");
+    for (int i = 0; i < input.length(); ++i) {
+        auto [l, r] = r_index.queryLemma3(i);
+        cout << l << " " << r << endl;
+    }
 
     return 0;
 }

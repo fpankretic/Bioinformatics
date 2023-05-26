@@ -51,37 +51,36 @@ RIndex::RIndex(const string &input) {
     predecessor_struct['$'].insert({dlr_off, bwt_size});
 
     wavelet_tree = Wavelet(bwt);
+
+    build_structs(input, suffix_array);
 }
 
-map<char, map<int, int>> RIndex::get_predecessor_struct() {
-    return predecessor_struct;
-}
-
-void build_structs(const string& str) {
-    vector<int> sa{};
-
+void RIndex::build_structs(const string& str, vector<int> &sa) {
     auto original = get_predecessor_struct();
-    unordered_map<int, int> reverse_struct;
 
-    for (const auto& entry : original) {
-        reverse_struct[entry.second] = entry.first;
+    unordered_map<int, int> reverse_struct;
+    for (const auto& map_ : original) {
+        if (map_.first != '$') {
+            for (const auto& entry : map_.second) {
+                reverse_struct[entry.second] = entry.first;
+            }
+        }
     }
 
-    vector<int> P;
-    vector<tuple<int, int>> N;
+    P = vector<int>();
+    N = vector<tuple<int, int>>();
+
     for (int i = 0; i < str.size(); ++i) {
-        if (reverse_struct.contains(str.at(i))) {
+        if (reverse_struct.contains(i)) {
             P.push_back(i);
-            auto q = reverse_struct[str.at(i)];
+            auto q = reverse_struct[i];
             N.emplace_back(sa[q-1], sa[q+1]);
         }
     }
 }
 
-tuple<int, int> querry(int k) {
-    vector<int> P;
-    vector<tuple<int, int>> N;
-    for (int i = 0; i < P.size(); ++i) {
+tuple<int, int> RIndex::queryLemma3(int k) {
+    for (int i = P.size() - 1; i >= 0; --i) {
         if (k >= P[i]) {
             return {get<0>(N[i]) + k - i, get<1>(N[i]) + k - i};
         }
@@ -118,16 +117,14 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) {
     while (i >= 0 && bottom > top) {
         char c = pattern[i];
         if (first) {
-            auto temp_tuple = pred(c, text_len - 1);
-            tie(bwt_offset, text_offset) = temp_tuple;
+            tie(bwt_offset, text_offset) = pred(c, text_len - 1);
             first = false;
         } else if (wavelet_tree.access(bwt_offset) == c) {
             cout << "here" << endl;
             text_offset -= 1;
             bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c , bwt_offset);
         } else {
-            auto temp_tuple = pred(c, bottom - 1);
-            tie(bwt_offset, text_offset) = temp_tuple;
+            tie(bwt_offset, text_offset) = pred(c, bottom - 1);
         }
         top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
         bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
@@ -155,12 +152,14 @@ int RIndex::count(const string& pattern) {
 vector<int> RIndex::locate(const string& pattern) {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
-    vector<int> offsets;
+    cout << endl << "tu sam" << endl;
+    cout << top << " " << bottom << " " << bwt_offset << " " << text_offset << endl;
 
-    if (top < bottom) {
-        for (int i = top; i < bottom; ++i) {
-            offsets.push_back(suffix_array[i]);
-        }
+    vector<int> offsets; offsets.push_back(text_offset);
+    for (int i = 0; i < bottom - top - 1; ++i) {
+        auto [l,r] = queryLemma3(text_offset - 1);
+        offsets.push_back(l);
+        text_offset = l;
     }
 
     sort(offsets.begin(), offsets.end());
@@ -178,9 +177,13 @@ void RIndex::print_suffix_array() {
 void RIndex::print_pattern_offsets(const string& pattern) {
     vector<int> occs = locate(pattern);
     if (!occs.empty()) {
-        cout << endl << "Offsets of pattern in text: " << endl;
+        cout << endl << "Offsets of pattern " << pattern << " in text: " << endl;
         for (int offset: occs) {
             cout << "Offset: " << offset << endl;
         }
     }
+}
+
+map<char, map<int, int>> RIndex::get_predecessor_struct() {
+    return this->predecessor_struct;
 }
