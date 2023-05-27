@@ -13,7 +13,79 @@ RIndex::RIndex(const string &input) {
             bwt += '$';
         }
     }
+
+    cout << bwt << endl;
+
+    char curr = '\0';
+    int run_start = -1;
+
+    for (int i = 0; i < bwt.size(); ++i) {
+        if (bwt[i] != curr) {
+            if (run_start != -1) {
+                if (bwt[i - 1] == '$') {
+                    predecessor_struct.insert({i - 1, bwt.size() - 1});
+                } else {
+                    predecessor_struct.insert({i - 1, suffix_array[i - 1] - 1});
+                }
+            }
+            run_start = i;
+            curr = bwt[i];
+
+            if (bwt[run_start] == '$') {
+                predecessor_struct.insert({run_start, bwt.size() - 1});
+            } else {
+                predecessor_struct.insert({run_start, suffix_array[run_start] - 1});
+            }
+        }
+    }
+    
+    if (bwt[bwt.size() - 1] == '$') {
+        predecessor_struct.insert({bwt.size() - 1, bwt.size() - 1});
+    } else {
+        predecessor_struct.insert({bwt.size() - 1, suffix_array[bwt.size() - 1] - 1});
+    }
+
     wavelet_tree = Wavelet(bwt);
+}
+
+map<int, int> RIndex::get_predecessor_struct() {
+    return predecessor_struct;
+}
+
+map<int, int> get_predecessor_struct() {
+    return {};
+}
+
+void build_structs(const string& str) {
+    vector<int> sa{};
+
+    auto original = get_predecessor_struct();
+    unordered_map<int, int> reverse_struct;
+
+    for (const auto& entry : original) {
+        reverse_struct[entry.second] = entry.first;
+    }
+
+    vector<int> P;
+    vector<tuple<int, int>> N;
+    for (int i = 0; i < str.size(); ++i) {
+        if (reverse_struct.contains(str.at(i))) {
+            P.push_back(i);
+            auto q = reverse_struct[str.at(i)];
+            N.emplace_back(sa[q-1], sa[q+1]);
+        }
+    }
+}
+
+tuple<int, int> querry(int k) {
+    vector<int> P;
+    vector<tuple<int, int>> N;
+    for (int i = 0; i < P.size(); ++i) {
+        if (k >= P[i]) {
+            return {get<0>(N[i]) + k - i, get<1>(N[i]) + k - i};
+        }
+    }
+    return {-1, -1};
 }
 
 pair<int, int> RIndex::match(const string& pattern) {

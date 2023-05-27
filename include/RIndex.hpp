@@ -8,10 +8,12 @@
 class RIndex {
 private:
     vector<int> suffix_array;
+    map<int, int> predecessor_struct;
     Wavelet wavelet_tree = Wavelet("abc");
 
 public:
     explicit RIndex(const string& input);
+    map<int, int> get_predecessor_struct();
     pair<int, int> match(const string& pattern);
     int count(const string& pattern);
     vector<int> locate(const string& pattern);
