@@ -36,6 +36,7 @@ RIndex::RIndex(const string &input) {
         }
     }
 
+    //rename
     int bwt_size = bwt.size() - 1;
     predecessor_struct[bwt[bwt_size]].insert({bwt_size, suffix_array[bwt_size] - 1});
 
