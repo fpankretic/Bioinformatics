@@ -14,8 +14,8 @@ RIndex::RIndex(const string &input) {
         }
     }
 
-    cout << "SA: " << suffix_array << endl;
-    cout << "BWT: " << bwt << endl;
+    // cout << "SA: " << suffix_array << endl;
+    // cout << "BWT: " << bwt << endl;
 
     text_len = bwt.size();
 
@@ -120,18 +120,18 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) {
             tie(bwt_offset, text_offset) = pred(c, text_len - 1);
             first = false;
         } else if (wavelet_tree.access(bwt_offset) == c) {
-            cout << "here" << endl;
+            // cout << "here" << endl;
             text_offset -= 1;
-            bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c , bwt_offset);
         } else {
             tie(bwt_offset, text_offset) = pred(c, bottom - 1);
         }
+        bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bwt_offset);
         top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
         bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
 
         i = i - 1;
 
-        cout << "Text offset: " << text_offset << " BWT offset: " << bwt_offset << endl;
+        // cout << "Text offset: " << text_offset << " BWT offset: " << bwt_offset << endl;
     }
 
     return {top, bottom, bwt_offset, text_offset};
@@ -152,8 +152,8 @@ int RIndex::count(const string& pattern) {
 vector<int> RIndex::locate(const string& pattern) {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
-    cout << endl << "tu sam" << endl;
-    cout << top << " " << bottom << " " << bwt_offset << " " << text_offset << endl;
+    // cout << endl << "tu sam" << endl;
+    // cout << top << " " << bottom << " " << bwt_offset << " " << text_offset << endl;
 
     vector<int> offsets; offsets.push_back(text_offset);
     for (int i = 0; i < bottom - top - 1; ++i) {
