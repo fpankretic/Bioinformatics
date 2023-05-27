@@ -27,25 +27,16 @@ RIndex::RIndex(const string &input) {
     for (int i = 0; i < bwt.size(); ++i) {
         if (bwt[i] != curr) {
             if (run_start != -1) {
-                if (!predecessor_struct.contains(bwt[i-1])) {
-                    predecessor_struct.insert({bwt[i-1], map<int,int>()});
-                }
                 predecessor_struct[bwt[i-1]].insert({i - 1, suffix_array[i - 1] - 1});
             }
             run_start = i;
             curr = bwt[i];
 
-            if (!predecessor_struct.contains(bwt[run_start])) {
-                predecessor_struct.insert({bwt[run_start], map<int,int>()});
-            }
             predecessor_struct[bwt[run_start]].insert({run_start, suffix_array[run_start] - 1});
         }
     }
 
     int bwt_size = bwt.size() - 1;
-    if (!predecessor_struct.contains(bwt[bwt_size])) {
-        predecessor_struct.insert({bwt[bwt_size], map<int,int>()});
-    }
     predecessor_struct[bwt[bwt_size]].insert({bwt_size, suffix_array[bwt_size] - 1});
 
     int dlr_off = get<0>(*(predecessor_struct['$'].begin()));
