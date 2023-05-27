@@ -125,7 +125,7 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) {
         } else {
             tie(bwt_offset, text_offset) = pred(c, bottom - 1);
         }
-        bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bwt_offset); // lf mapping function
+        bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bwt_offset); // lf mapping function, char_offset function
         top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
         bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
 
