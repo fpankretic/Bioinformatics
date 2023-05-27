@@ -1,5 +1,7 @@
 #include "../include/RIndex.hpp"
 
+//add wavelet intialization correctly
+//: wavelet_tree(bwt(input))
 RIndex::RIndex(const string &input) {
     csa_bitcompressed<> csa; construct_im(csa, input, 1);
     string bwt;
@@ -67,8 +69,8 @@ void RIndex::build_structs(const string& str, vector<int> &sa) {
         }
     }
 
-    P = vector<int>();
-    N = vector<tuple<int, int>>();
+    P = vector<int>(); //phrase_starts (bitvector)
+    N = vector<tuple<int, int>>(); //neighbours
 
     for (int i = 0; i < str.size(); ++i) {
         if (reverse_struct.contains(i)) {
@@ -79,9 +81,11 @@ void RIndex::build_structs(const string& str, vector<int> &sa) {
     }
 }
 
+//potentially use rank and select, replace tuple with pair
 tuple<int, int> RIndex::queryLemma3(int k) {
     for (int i = P.size() - 1; i >= 0; --i) {
         if (k >= P[i]) {
+            //query only once
             return {get<0>(N[i]) + k - i, get<1>(N[i]) + k - i};
         }
     }
@@ -152,6 +156,8 @@ vector<int> RIndex::locate(const string& pattern) {
 
     // cout << endl << "tu sam" << endl;
     // cout << top << " " << bottom << " " << bwt_offset << " " << text_offset << endl;
+
+    // assert to check if bwt_offset is equal to bottom
 
     vector<int> offsets; offsets.push_back(text_offset);
     for (int i = 0; i < bottom - top - 1; ++i) {
