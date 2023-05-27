@@ -89,8 +89,9 @@ tuple<int, int> RIndex::queryLemma3(int k) {
 }
 
 pair<int, int> RIndex::pred(char c, int offset) {
-    map<int, int> curr_char_map = predecessor_struct[c];
+    const map<int, int>& curr_char_map = predecessor_struct[c];
 
+    // replace with rank and select
     for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
         if (it->first <= offset) {
             return {it->first, it->second};
@@ -120,18 +121,15 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) {
             tie(bwt_offset, text_offset) = pred(c, text_len - 1);
             first = false;
         } else if (wavelet_tree.access(bwt_offset) == c) {
-            // cout << "here" << endl;
             text_offset -= 1;
         } else {
             tie(bwt_offset, text_offset) = pred(c, bottom - 1);
         }
-        bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bwt_offset);
+        bwt_offset = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bwt_offset); // lf mapping function
         top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
         bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
 
         i = i - 1;
-
-        // cout << "Text offset: " << text_offset << " BWT offset: " << bwt_offset << endl;
     }
 
     return {top, bottom, bwt_offset, text_offset};
