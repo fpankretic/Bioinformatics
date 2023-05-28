@@ -7,11 +7,10 @@
 
 class RIndex {
 private:
-    vector<int> suffix_array;
-    map<char, map<int, int>> predecessor_struct;
+    map<char, map<int, int>> run_offsets;
     Wavelet wavelet_tree = Wavelet("abc");
-    vector<int> P;
-    vector<tuple<int, int>> N;
+    vector<int> phrase_starts;
+    vector<int> neighbours;
     int text_len;
 
 public:
@@ -19,9 +18,9 @@ public:
 
     map<char, map<int, int>> get_predecessor_struct();
 
-    void build_structs(const string &, vector<int> &);
+    void build_locate_structs(const string &str, vector<int> &sa);
 
-    tuple<int, int> queryLemma3(int);
+    int find_neighbours_offset(int);
 
     pair<int, int> pred(char c, int offset);
 
@@ -30,8 +29,6 @@ public:
     int count(const string &pattern);
 
     vector<int> locate(const string &pattern);
-
-    void print_suffix_array();
 
     void print_pattern_offsets(const string &pattern);
 };

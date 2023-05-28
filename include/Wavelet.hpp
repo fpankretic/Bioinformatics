@@ -40,7 +40,7 @@ struct Node {
 class Wavelet {
 private:
     shared_ptr<Node> start;
-    map<char, int> char_map;
+    map<char, int> char_offsets;
     unordered_map<char, string> labels;
 
 private:
@@ -62,7 +62,8 @@ private:
 public:
     explicit Wavelet(const string& str);
     shared_ptr<Node> get_start();
-    map<char, int> get_char_map();
+    int get_char_offset(char c);
+    int lf_mapping(char c, int index);
     void build(const string& str);
     char access(unsigned long index);
     int rank(char character, int index);

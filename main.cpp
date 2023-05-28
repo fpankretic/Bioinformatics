@@ -26,19 +26,9 @@ int main() {
     cout << input << endl;
     RIndex r_index(input);
     cout << r_index.count(pattern) << endl;
-    // for (const auto& item: r_index.get_predecessor_struct()) {
-    //     cout << "Pred struct for char " << item.first << endl;
-    //     for (const auto& curr: item.second) {
-    //         cout << "BWT index " << curr.first << " Offset " << curr.second << endl;
-    //     }
-    // }
 
 
     r_index.print_pattern_offsets(pattern);
-    // for (int i = 0; i < input.length(); ++i) {
-    //     auto [l, r] = r_index.queryLemma3(i);
-    //     cout << l << " " << r << endl;
-    // }
 
     return 0;
 }

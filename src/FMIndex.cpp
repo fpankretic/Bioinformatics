@@ -28,8 +28,8 @@ pair<int, int> FMIndex::match(const string& pattern) {
 
     while (i >= 0 && bottom > top) {
         char c = pattern[i];
-        top = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, top);
-        bottom = wavelet_tree.get_char_map()[c] + wavelet_tree.rank(c, bottom);
+        top = wavelet_tree.lf_mapping(c, top);
+        bottom = wavelet_tree.lf_mapping(c, bottom);
 
         i = i - 1;
     }

@@ -11,10 +11,10 @@ void Wavelet::build(const string &str) {
     unordered_set<char> alphabet;
     for (const auto &item: str) {
         alphabet.insert(item);
-        if (char_map.find(item) == char_map.end()) {
-            char_map.insert({item, 0});
+        if (char_offsets.find(item) == char_offsets.end()) {
+            char_offsets.insert({item, 0});
         }
-        char_map[item] += 1;
+        char_offsets[item] += 1;
     }
 
     if (alphabet.size() < 2) {
@@ -22,9 +22,9 @@ void Wavelet::build(const string &str) {
     }
 
     int prev_cnt = 0;
-    for (const auto &item: char_map) {
+    for (const auto &item: char_offsets) {
         int temp = item.second + prev_cnt;
-        char_map[item.first] = prev_cnt;
+        char_offsets[item.first] = prev_cnt;
         prev_cnt = temp;
     }
 
@@ -89,8 +89,8 @@ shared_ptr<Node> Wavelet::get_start() {
     return start;
 }
 
-map<char, int> Wavelet::get_char_map() {
-    return char_map;
+int Wavelet::get_char_offset(char c) {
+    return char_offsets[c];
 }
 
 char Wavelet::access(unsigned long index) {
@@ -196,4 +196,8 @@ void Wavelet::print() {
             cout << dpth << curr_node->chr << endl;
         }
     }
+}
+
+int Wavelet::lf_mapping(char c, int index) {
+    return get_char_offset(c) + rank(c, index);
 }
