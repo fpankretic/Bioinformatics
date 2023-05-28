@@ -43,7 +43,7 @@ RIndex::RIndex(const string &input){
 }
 
 void RIndex::build_locate_structs(const string& str, vector<int> &sa) {
-    auto original = get_predecessor_struct();
+    auto original = run_offsets;
 
     unordered_map<int, int> reverse_isa;
     for (const auto& map_ : original) {
@@ -157,8 +157,4 @@ void RIndex::print_pattern_offsets(const string& pattern) {
             cout << "Offset: " << offset << endl;
         }
     }
-}
-
-map<char, map<int, int>> RIndex::get_predecessor_struct() {
-    return this->run_offsets;
 }

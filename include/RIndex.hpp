@@ -16,8 +16,6 @@ private:
 public:
     explicit RIndex(const string &input);
 
-    map<char, map<int, int>> get_predecessor_struct();
-
     void build_locate_structs(const string &str, vector<int> &sa);
 
     int find_neighbours_offset(int);
