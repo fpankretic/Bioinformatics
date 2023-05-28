@@ -100,7 +100,7 @@ SCENARIO("Test rank function") {
         }
 
         WHEN("Rank is ran in expected range") {
-            auto actual_amount = given_wavelet_tree.rank('a',2);
+            auto actual_amount = given_wavelet_tree.rank('a',1);
             THEN("Actual amount is equal to 1") {
                 REQUIRE(actual_amount == 1);
             }
@@ -115,7 +115,7 @@ SCENARIO("Test rank function") {
 
         WHEN("Rank is ran in out of expected range") {
             THEN("Rank should trow") {
-                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',3), invalid_argument);
+                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',2), invalid_argument);
             }
         }
     }
@@ -132,14 +132,14 @@ SCENARIO("Test rank function") {
 
         WHEN("Rank is given starting letter at index after") {
             auto actual_amount = given_wavelet_tree.rank('m',1);
-            THEN("ActualAmount is equal to 1") {
+            THEN("Actual amount is equal to 1") {
                 REQUIRE(actual_amount == 1);
             }
         }
 
         WHEN("Rank is given middle letter right at its 3rd index") {
             auto actual_amount = given_wavelet_tree.rank('s',5);
-            THEN("ActualAmount is equal to 2") {
+            THEN("Actual amount is equal to 2") {
                 REQUIRE(actual_amount == 2);
             }
         }
@@ -151,30 +151,37 @@ SCENARIO("Test select function") {
         string given_small_string = "ab";
         Wavelet given_wavelet_tree(given_small_string);
 
-        WHEN("Rank is ran in expected range") {
-            auto actual_amount = given_wavelet_tree.rank('a',0);
+        WHEN("Select is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.select('a',0);
             THEN("Actual amount is equal to 0") {
                 REQUIRE(actual_amount == 0);
             }
         }
 
-        WHEN("Rank is ran in expected range") {
-            auto actual_amount = given_wavelet_tree.rank('a',2);
+        WHEN("Select is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.select('a',1);
             THEN("Actual amount is equal to 1") {
                 REQUIRE(actual_amount == 1);
             }
         }
 
-        WHEN("Rank is ran in expected range") {
-            auto actual_amount = given_wavelet_tree.rank('b',1);
-            THEN("Actual amount is equal to 0") {
-                REQUIRE(actual_amount == 0);
+        WHEN("Select is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.select('b',0);
+            THEN("Actual amount is equal to 1") {
+                REQUIRE(actual_amount == 1);
             }
         }
 
-        WHEN("Rank is ran in out of expected range") {
-            THEN("Rank should trow") {
-                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',3), invalid_argument);
+        WHEN("Select is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.select('b',1);
+            THEN("Actual amount is equal to 1") {
+                REQUIRE(actual_amount == 1);
+            }
+        }
+
+        WHEN("Select is ran in out of expected range") {
+            THEN("Select should trow") {
+                REQUIRE_THROWS_AS(given_wavelet_tree.select('a',3), invalid_argument);
             }
         }
     }
@@ -183,23 +190,30 @@ SCENARIO("Test select function") {
         string given_medium_string = "mississippi";
         Wavelet given_wavelet_tree(given_medium_string);
 
-        WHEN("Rank is given non existing letter") {
-            THEN("Rank should throw") {
-                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',given_medium_string.length()) , invalid_argument);
+        WHEN("Select is given non existing letter") {
+            THEN("Select should throw") {
+                REQUIRE_THROWS_AS(given_wavelet_tree.select('a',given_medium_string.length()) , invalid_argument);
             }
         }
 
-        WHEN("Rank is given starting letter at index after") {
-            auto actual_amount = given_wavelet_tree.rank('m',1);
-            THEN("ActualAmount is equal to 1") {
-                REQUIRE(actual_amount == 1);
+        WHEN("Select is given starting letter and rank 0") {
+            auto actual_amount = given_wavelet_tree.select('m',0);
+            THEN("Actual amount is equal to 0") {
+                REQUIRE(actual_amount == 0);
             }
         }
 
-        WHEN("Rank is given middle letter right at its 3rd index") {
-            auto actual_amount = given_wavelet_tree.rank('s',5);
-            THEN("ActualAmount is equal to 2") {
-                REQUIRE(actual_amount == 2);
+        WHEN("Select is given starting letter and rank 1") {
+            auto actual_amount = given_wavelet_tree.select('m',1);
+            THEN("Actual amount is equal to given_medium_string length - 1") {
+                REQUIRE(actual_amount == given_medium_string.length() - 1);
+            }
+        }
+
+        WHEN("Select is given middle letter and rank 3") {
+            auto actual_amount = given_wavelet_tree.select('s',3);
+            THEN("Actual amount is equal to 6") {
+                REQUIRE(actual_amount == 6);
             }
         }
     }
