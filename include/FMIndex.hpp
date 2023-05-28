@@ -8,7 +8,7 @@
 class FMIndex {
 private:
     vector<int> suffix_array;
-    Wavelet wavelet_tree = Wavelet("abc");
+    Wavelet wavelet_tree;
 
 public:
     explicit FMIndex(const string& input);
@@ -19,4 +19,4 @@ public:
     void print_pattern_offsets(const string& pattern);
 };
 
-#endif //BIOINFORMATICS_FMINDEX_HPP
+#endif

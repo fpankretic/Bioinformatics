@@ -60,6 +60,7 @@ private:
     }
 
 public:
+    explicit Wavelet() = default;
     explicit Wavelet(const string& str);
     shared_ptr<Node> get_start();
     int get_char_offset(char c);

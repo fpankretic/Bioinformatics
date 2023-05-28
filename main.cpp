@@ -7,14 +7,18 @@
 using namespace std;
 
 int main() {
-    string input = "mississippi";
+    string input = "ipssm$pissii";
     Wavelet tree(input);
 
     cout << "Wavelet tree: " << endl;
     tree.print();
     cout << endl;
 
-    cout << tree.rank('s', tree.select('s', 3)) << endl;
+    cout << "BWT: ipssm$pissii" << endl;
+    cout << tree.select('$', 1) << endl;
+    cout << tree.select('$', 2) << endl;
+    cout << tree.select('$', 3) << endl;
+    cout << tree.select('$', 4) << endl;
 
     FMIndex fm_index(input);
 

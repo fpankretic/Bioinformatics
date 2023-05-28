@@ -8,7 +8,7 @@
 class RIndex {
 private:
     map<char, map<int, int>> run_offsets;
-    Wavelet wavelet_tree = Wavelet("abc");
+    Wavelet wavelet_tree;
     vector<int> phrase_starts;
     vector<int> neighbours;
     int text_len;

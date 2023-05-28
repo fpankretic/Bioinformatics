@@ -140,7 +140,7 @@ int Wavelet::select(const char character, int index) {
     int k = 0;
 
     while (node->chr == 0) {
-        char b = labels[character][k];
+        char b = labels.at(character).at(k);
 
         if (b == '0') {
             node = node->left;
@@ -157,10 +157,11 @@ int Wavelet::select(const char character, int index) {
         node = node->parent;
         char b = labels[character][k];
 
+        cout << node->b_vector << endl;
         if (b == '0') {
             index = (int) node->select0(index + 1);
         } else {
-            index = (int) node->select1(index + 1);
+            index = (int) node->select1(index);
         }
 
         k--;

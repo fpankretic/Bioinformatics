@@ -1,8 +1,6 @@
 #include "../include/RIndex.hpp"
 
-//add wavelet intialization correctly
-//: wavelet_tree(bwt(input))
-RIndex::RIndex(const string &input) {
+RIndex::RIndex(const string &input){
     csa_bitcompressed<> csa; construct_im(csa, input, 1);
     string bwt;
     vector<int> suffix_array;
@@ -87,7 +85,11 @@ pair<int, int> RIndex::pred(char c, int offset) {
     // replace with rank and select
     for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
         if (it->first <= offset) {
-            return {it->first, it->second};
+            auto var = wavelet_tree.rank(c, offset);
+            auto var2 = wavelet_tree.select(c, var);
+            auto var3 = it->first;
+            assert(wavelet_tree.select(c, wavelet_tree.rank(c, offset)) - 1 == it->first);
+            return {it->first + 1, it->second};
         }
     }
 
