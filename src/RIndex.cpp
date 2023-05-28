@@ -74,24 +74,17 @@ int RIndex::find_neighbours_offset(int k) {
 }
 
 pair<int, int> RIndex::pred(char c, int offset) {
-    const map<int, int>& curr_char_map = run_offsets[c];
+    const map<int, int>& curr_char_map = run_offsets.at(c);
 
-    // replace with rank and select
-    for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
-        if (it->first <= offset) {
-            auto var = wavelet_tree.rank(c, offset);
-            if (c != wavelet_tree.access(offset)) {
-                var--;
-            }
-            auto var2 = wavelet_tree.select(c, var);
-            auto var3 = it->first;
-            assert(var3 == var2);
-
-            return {it->first, it->second};
-        }
+    int rank = wavelet_tree.rank(c, offset);
+    if (wavelet_tree.access(offset) != c) {
+        rank--;
     }
 
-    return {-1, -1};
+    int bwt_offset = wavelet_tree.select(c, rank);
+    int text_offset = curr_char_map.at(bwt_offset);
+
+    return {bwt_offset, text_offset};
 }
 
 tuple<int, int, int, int> RIndex::match(const string& pattern) {
@@ -135,8 +128,6 @@ int RIndex::count(const string& pattern) {
         return 0;
     }
 
-    // cout << "Text offset: " << text_offset << endl;
-
     return bottom - top;
 }
 
@@ -146,8 +137,6 @@ vector<int> RIndex::locate(const string& pattern) {
     if (top == bottom) {
         return {};
     }
-
-    // cout << "Text offset: " << text_offset << endl;
 
     vector<int> offsets; 
     offsets.push_back(text_offset);
