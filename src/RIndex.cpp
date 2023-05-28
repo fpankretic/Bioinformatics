@@ -135,7 +135,7 @@ int RIndex::count(const string& pattern) {
         return 0;
     }
 
-    cout << "Text offset: " << text_offset << endl;
+    // cout << "Text offset: " << text_offset << endl;
 
     return bottom - top;
 }
