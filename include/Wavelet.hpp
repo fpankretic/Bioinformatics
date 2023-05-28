@@ -41,7 +41,9 @@ class Wavelet {
 private:
     shared_ptr<Node> start;
     map<char, int> char_offsets;
+    map<char, int> char_counts;
     unordered_map<char, string> labels;
+    int text_len;
 
 private:
     void build_impl(const shared_ptr<Node>& root, const string& str, vector<char>& alphas, const string& label = "");
@@ -63,6 +65,7 @@ public:
     explicit Wavelet() = default;
     explicit Wavelet(const string& str);
     shared_ptr<Node> get_start();
+    int get_text_len() const;
     int get_char_offset(char c);
     int lf_mapping(char c, int index);
     void build(const string& str);

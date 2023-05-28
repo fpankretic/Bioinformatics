@@ -11,10 +11,10 @@ void Wavelet::build(const string &str) {
     unordered_set<char> alphabet;
     for (const auto &item: str) {
         alphabet.insert(item);
-        if (char_offsets.find(item) == char_offsets.end()) {
-            char_offsets.insert({item, 0});
+        if (char_counts.find(item) == char_counts.end()) {
+            char_counts.insert({item, 0});
         }
-        char_offsets[item] += 1;
+        char_counts[item] += 1;
     }
 
     if (alphabet.size() < 2) {
@@ -22,11 +22,13 @@ void Wavelet::build(const string &str) {
     }
 
     int prev_cnt = 0;
-    for (const auto &item: char_offsets) {
+    for (const auto &item: char_counts) {
         int temp = item.second + prev_cnt;
         char_offsets[item.first] = prev_cnt;
         prev_cnt = temp;
     }
+
+    text_len = str.size();
 
     vector<char> alphas(alphabet.begin(), alphabet.end());
     sort(alphas.begin(), alphas.end());
@@ -45,7 +47,6 @@ void Wavelet::build_impl(const shared_ptr<Node>& root, const string &str, vector
     }
     root->construct_vector(b_vector);
 
-    // we finish if we are here
     char c;
     if (right.size() == 1) {
         assert(left.size() <= 1);
@@ -87,6 +88,10 @@ void Wavelet::build_impl(const shared_ptr<Node>& root, const string &str, vector
 
 shared_ptr<Node> Wavelet::get_start() {
     return start;
+}
+
+int Wavelet::get_text_len() const {
+    return text_len;
 }
 
 int Wavelet::get_char_offset(char c) {
@@ -139,6 +144,10 @@ int Wavelet::select(const char character, int index) {
     auto node = start;
     int k = 0;
 
+    if(char_counts[character] <= index) {
+        return text_len - 1;
+    }
+
     while (node->chr == 0) {
         char b = labels.at(character).at(k);
 
@@ -157,11 +166,10 @@ int Wavelet::select(const char character, int index) {
         node = node->parent;
         char b = labels[character][k];
 
-        cout << node->b_vector << endl;
         if (b == '0') {
             index = (int) node->select0(index + 1);
         } else {
-            index = (int) node->select1(index);
+            index = (int) node->select1(index + 1);
         }
 
         k--;

@@ -9,9 +9,9 @@ class RIndex {
 private:
     map<char, map<int, int>> run_offsets;
     Wavelet wavelet_tree;
-    vector<int> phrase_starts;
+    bit_vector phrase_starts;
+    rank_support_v<1,1> phrase_rank1;
     vector<int> neighbours;
-    int text_len;
 
 public:
     explicit RIndex(const string &input);

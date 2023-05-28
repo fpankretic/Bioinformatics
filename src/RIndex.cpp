@@ -15,8 +15,6 @@ RIndex::RIndex(const string &input){
         }
     }
 
-    text_len = bwt.size();
-
     char curr = '\0';
     int run_start = -1;
 
@@ -56,27 +54,22 @@ void RIndex::build_locate_structs(const string& str, vector<int> &sa) {
         }
     }
 
-    phrase_starts = vector<int>();
-    neighbours = vector<int>();
-
+    phrase_starts = bit_vector(str.size());
     for (int i = 0; i < str.size(); ++i) {
         if (reverse_isa.contains(i)) {
-            phrase_starts.push_back(i);
-            auto q = reverse_isa[i];
-            neighbours.emplace_back(sa[q - 1]);
+            phrase_starts[i] = true;
+            neighbours.emplace_back(sa[reverse_isa[i] - 1]);
         }
     }
+    phrase_rank1 = rank_support_v(&phrase_starts);
 }
 
-//potentially use rank and select, replace tuple with pair
+
+//1001
 int RIndex::find_neighbours_offset(int k) {
-    for (int i = phrase_starts.size() - 1; i >= 0; --i) {
-        if (k >= phrase_starts[i]) {
-            //query only once
-            return neighbours[i] + k - i;
-        }
-    }
-    return -1;
+    auto index = phrase_rank1(k);
+    if (!phrase_starts[k]) index--;
+    return neighbours[index] + k - index;
 }
 
 pair<int, int> RIndex::pred(char c, int offset) {
@@ -85,11 +78,11 @@ pair<int, int> RIndex::pred(char c, int offset) {
     // replace with rank and select
     for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
         if (it->first <= offset) {
-            auto var = wavelet_tree.rank(c, offset);
+            /*auto var = wavelet_tree.rank(c, offset);
             auto var2 = wavelet_tree.select(c, var);
             auto var3 = it->first;
-            assert(wavelet_tree.select(c, wavelet_tree.rank(c, offset)) - 1 == it->first);
-            return {it->first + 1, it->second};
+            assert(wavelet_tree.rank(c, wavelet_tree.select(c, offset)) == it->first);*/
+            return {it->first, it->second};
         }
     }
 
@@ -113,7 +106,7 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) {
     while (i >= 0 && bottom > top) {
         char c = pattern[i];
         if (first) {
-            tie(bwt_offset, text_offset) = pred(c, text_len - 1);
+            tie(bwt_offset, text_offset) = pred(c, wavelet_tree.get_text_len() - 1);
             first = false;
         } else if (wavelet_tree.access(bwt_offset) == c) {
             text_offset -= 1;
@@ -144,7 +137,6 @@ int RIndex::count(const string& pattern) {
 
 vector<int> RIndex::locate(const string& pattern) {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
-    assert(bwt_offset == bottom - 1);
 
     vector<int> offsets; offsets.push_back(text_offset);
     for (int i = 0; i < bottom - top - 1; ++i) {
