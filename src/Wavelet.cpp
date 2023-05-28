@@ -101,7 +101,7 @@ int Wavelet::get_char_offset(char c) {
 char Wavelet::access(unsigned long index) {
     shared_ptr<Node> node = start;
 
-    if (index >= node->b_vector.size() || labels.find(character) == labels.end()) {
+    if (index > node->b_vector.size()) {
         throw invalid_argument("Given input is invalid.");
     }
 
@@ -124,7 +124,7 @@ int Wavelet::rank(const char character, int index) {
     auto node = start;
     int k = 0;
 
-    if (index >= node->b_vector.size() || labels.find(character) == labels.end()) {
+    if (index > node->b_vector.size() || labels.find(character) == labels.end()) {
         throw invalid_argument("Given input is invalid.");
     }
 
@@ -148,7 +148,7 @@ int Wavelet::select(const char character, int index) {
     auto node = start;
     int k = 0;
 
-    if (index >= node->b_vector.size() || labels.find(character) == labels.end()) {
+    if (index > node->b_vector.size() || labels.find(character) == labels.end()) {
         throw invalid_argument("Given input is invalid.");
     }
 

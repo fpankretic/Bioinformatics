@@ -115,7 +115,7 @@ SCENARIO("Test rank function") {
 
         WHEN("Rank is ran in out of expected range") {
             THEN("Rank should trow") {
-                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',2), invalid_argument);
+                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',3), invalid_argument);
             }
         }
     }
