@@ -7,8 +7,8 @@
 using namespace std;
 
 int main() {
-    string input = "mississippi";
-    string pattern = "s";
+    string input = "testtesttest";
+    string pattern = "testtest";
 
     Wavelet tree(input);
 

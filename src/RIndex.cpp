@@ -135,7 +135,7 @@ int RIndex::count(const string& pattern) {
         return 0;
     }
 
-    // cout << "Text offset: " << text_offset << endl;
+    cout << "Text offset: " << text_offset << endl;
 
     return bottom - top;
 }
@@ -146,6 +146,8 @@ vector<int> RIndex::locate(const string& pattern) {
     if (top == bottom) {
         return {};
     }
+
+    cout << "Text offset: " << text_offset << endl;
 
     vector<int> offsets; 
     offsets.push_back(text_offset);
