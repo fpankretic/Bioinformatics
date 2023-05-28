@@ -7,18 +7,18 @@
 
 class RIndex {
 private:
-    map<char, map<int, int>> run_offsets;
     Wavelet wavelet_tree;
+    map<char, map<int, int>> run_offsets;
+    vector<int> neighbours;
     bit_vector phrase_starts;
     rank_support_v<1,1> phrase_rank1;
-    vector<int> neighbours;
 
 public:
     explicit RIndex(const string &input);
 
-    void build_locate_structs(const string &str, vector<int> &sa);
+    void build_locate_structs(const string &str, const vector<int> &sa);
 
-    int find_neighbours_offset(int);
+    int find_neighbours_offset(int k);
 
     pair<int, int> pred(char c, int offset);
 

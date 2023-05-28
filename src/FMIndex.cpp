@@ -1,8 +1,11 @@
 #include "../include/FMIndex.hpp"
 
 FMIndex::FMIndex(const string &input) {
-    csa_bitcompressed<> csa; construct_im(csa, input, 1);
+    csa_bitcompressed<> csa; 
+    construct_im(csa, input, 1);
+
     string bwt;
+    
     for (int i = 0; i < csa.size(); ++i) {
         suffix_array.push_back((int) csa[i]);
         char c = (char) csa.bwt[i];
