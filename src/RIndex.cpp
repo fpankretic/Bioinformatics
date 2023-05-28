@@ -1,3 +1,4 @@
+//
 #include "../include/RIndex.hpp"
 
 RIndex::RIndex(const string &input){

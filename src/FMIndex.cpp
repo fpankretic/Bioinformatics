@@ -1,3 +1,4 @@
+//
 #include "../include/FMIndex.hpp"
 
 FMIndex::FMIndex(const string &input) {
