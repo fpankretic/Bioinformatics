@@ -98,10 +98,6 @@ int Wavelet::get_char_offset(char c) {
     return char_offsets[c];
 }
 
-const map<char, int>& Wavelet::get_char_counts() {
-    return this->char_counts;
-}
-
 char Wavelet::access(unsigned long index) {
     shared_ptr<Node> node = start;
 

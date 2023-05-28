@@ -59,7 +59,7 @@ private:
             right.push_back(alphas[i]);
         }
 
-        return tuple<vector<char>, vector<char>>{left, right};
+        return {left, right};
     }
 
 public:
@@ -84,8 +84,6 @@ public:
     int select(char character, int index);
 
     void print();
-
-    const map<char, int> &get_char_counts();
 };
 
 #endif
