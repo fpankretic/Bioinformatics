@@ -17,6 +17,8 @@ struct Node {
     bit_vector b_vector;
     rank_support_v<0,1> rank0;
     rank_support_v<1,1> rank1;
+    select_support_mcl<0,1> select0;
+    select_support_mcl<1,1> select1;
 
     char chr = 0;
 
@@ -30,8 +32,9 @@ struct Node {
         this->b_vector = std::move(vec);
         this->rank0 = rank_support_v<0,1>(&(this->b_vector));
         this->rank1 = rank_support_v<1,1>(&(this->b_vector));
+        this->select0 = select_support_mcl<0,1>(&(this->b_vector));
+        this->select1 = select_support_mcl<1,1>(&(this->b_vector));
     }
-
 };
 
 class Wavelet {
@@ -63,6 +66,7 @@ public:
     void build(const string& str);
     char access(unsigned long index);
     int rank(char character, int index);
+    int select(char character, int index);
     void print();
 };
 

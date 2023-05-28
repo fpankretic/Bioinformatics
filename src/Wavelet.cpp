@@ -135,6 +135,40 @@ int Wavelet::rank(const char character, int index) {
     return index;
 }
 
+int Wavelet::select(const char character, int index) {
+    auto node = start;
+    int k = 0;
+
+    while (node->chr == 0) {
+        char b = labels[character][k];
+
+        if (b == '0') {
+            node = node->left;
+        } else {
+            node = node->right;
+        }
+
+        k = k + 1;
+    }
+
+    k = (int) labels[character].length() - 1;
+
+    while (node->parent) {
+        node = node->parent;
+        char b = labels[character][k];
+
+        if (b == '0') {
+            index = (int) node->select0(index);
+        } else {
+            index = (int) node->select1(index);
+        }
+
+        k = k - 1;
+    }
+
+    return index;
+}
+
 void Wavelet::print() {
     queue<pair<shared_ptr<Node>, int>> open;
     open.emplace(start, 0);
