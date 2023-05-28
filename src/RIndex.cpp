@@ -79,7 +79,8 @@ pair<int, int> RIndex::pred(char c, int offset) {
     for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
         if (it->first <= offset) {
             auto var = wavelet_tree.rank(c, offset);
-            if (var != wavelet_tree.get_char_counts().at(c) - 1) var--;
+            if (c != wavelet_tree.access(offset)) var--;
+            //if (var != wavelet_tree.get_char_counts().at(c) - 1 || var == 1) var--;
             auto var2 = wavelet_tree.select(c, var);
             auto var3 = it->first;
             assert(var3 == var2);
@@ -138,6 +139,10 @@ int RIndex::count(const string& pattern) {
 
 vector<int> RIndex::locate(const string& pattern) {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
+
+    if (top == bottom) {
+        return {};
+    }
 
     vector<int> offsets; offsets.push_back(text_offset);
     for (int i = 0; i < bottom - top - 1; ++i) {
