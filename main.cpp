@@ -14,7 +14,7 @@ int main() {
     tree.print();
     cout << endl;
 
-    cout << tree.select('s', 3) << endl;
+    cout << tree.rank('s', tree.select('s', 3)) << endl;
 
     FMIndex fm_index(input);
 

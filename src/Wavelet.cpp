@@ -148,7 +148,7 @@ int Wavelet::select(const char character, int index) {
             node = node->right;
         }
 
-        k = k + 1;
+        k++;
     }
 
     k = (int) labels[character].length() - 1;
@@ -158,12 +158,12 @@ int Wavelet::select(const char character, int index) {
         char b = labels[character][k];
 
         if (b == '0') {
-            index = (int) node->select0(index);
+            index = (int) node->select0(index + 1);
         } else {
-            index = (int) node->select1(index);
+            index = (int) node->select1(index + 1);
         }
 
-        k = k - 1;
+        k--;
     }
 
     return index;
