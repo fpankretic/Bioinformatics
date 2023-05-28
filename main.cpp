@@ -36,7 +36,7 @@ int main() {
 
     FMIndex fm_index(input);
 
-    string pattern = "i";
+    string pattern = "ssi";
 
     fm_index.print_suffix_array();
     fm_index.print_pattern_offsets(pattern);

@@ -78,10 +78,11 @@ pair<int, int> RIndex::pred(char c, int offset) {
     // replace with rank and select
     for (auto it = curr_char_map.rbegin(); it != curr_char_map.rend(); it++) {
         if (it->first <= offset) {
-            /*auto var = wavelet_tree.rank(c, offset);
+            auto var = wavelet_tree.rank(c, offset);
+            if (var != wavelet_tree.get_char_counts().at(c) - 1) var--;
             auto var2 = wavelet_tree.select(c, var);
             auto var3 = it->first;
-            assert(wavelet_tree.rank(c, wavelet_tree.select(c, offset)) == it->first);*/
+            assert(var3 == var2);
             return {it->first, it->second};
         }
     }

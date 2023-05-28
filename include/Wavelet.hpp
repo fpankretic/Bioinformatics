@@ -15,10 +15,10 @@ struct Node {
     shared_ptr<Node> right = nullptr;
 
     bit_vector b_vector;
-    rank_support_v<0,1> rank0;
-    rank_support_v<1,1> rank1;
-    select_support_mcl<0,1> select0;
-    select_support_mcl<1,1> select1;
+    rank_support_v<0, 1> rank0;
+    rank_support_v<1, 1> rank1;
+    select_support_mcl<0, 1> select0;
+    select_support_mcl<1, 1> select1;
 
     char chr = 0;
 
@@ -30,10 +30,10 @@ struct Node {
 
     void construct_vector(bit_vector vec) {
         this->b_vector = std::move(vec);
-        this->rank0 = rank_support_v<0,1>(&(this->b_vector));
-        this->rank1 = rank_support_v<1,1>(&(this->b_vector));
-        this->select0 = select_support_mcl<0,1>(&(this->b_vector));
-        this->select1 = select_support_mcl<1,1>(&(this->b_vector));
+        this->rank0 = rank_support_v<0, 1>(&(this->b_vector));
+        this->rank1 = rank_support_v<1, 1>(&(this->b_vector));
+        this->select0 = select_support_mcl<0, 1>(&(this->b_vector));
+        this->select1 = select_support_mcl<1, 1>(&(this->b_vector));
     }
 };
 
@@ -46,8 +46,9 @@ private:
     int text_len;
 
 private:
-    void build_impl(const shared_ptr<Node>& root, const string& str, vector<char>& alphas, const string& label = "");
-    static tuple<vector<char>,vector<char>> get_alphabets(vector<char>& alphas) {
+    void build_impl(const shared_ptr<Node> &root, const string &str, vector<char> &alphas, const string &label = "");
+
+    static tuple<vector<char>, vector<char>> get_alphabets(vector<char> &alphas) {
         vector<char> left;
         vector<char> right;
 
@@ -63,16 +64,28 @@ private:
 
 public:
     explicit Wavelet() = default;
-    explicit Wavelet(const string& str);
+
+    explicit Wavelet(const string &str);
+
     shared_ptr<Node> get_start();
+
     int get_text_len() const;
+
     int get_char_offset(char c);
+
     int lf_mapping(char c, int index);
-    void build(const string& str);
+
+    void build(const string &str);
+
     char access(unsigned long index);
+
     int rank(char character, int index);
+
     int select(char character, int index);
+
     void print();
+
+    const map<char, int> &get_char_counts();
 };
 
 #endif
