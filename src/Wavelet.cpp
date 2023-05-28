@@ -144,6 +144,10 @@ int Wavelet::select(const char character, int index) {
     auto node = start;
     int k = 0;
 
+    if (index > node->b_vector.size() || labels.find(character) == labels.end() ) {
+        throw invalid_argument("Given input is invalid.");
+    }
+
     if(char_counts[character] <= index) {
         return text_len - 1;
     }

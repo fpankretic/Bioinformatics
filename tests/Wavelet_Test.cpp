@@ -145,3 +145,62 @@ SCENARIO("Test rank function") {
         }
     }
 }
+
+SCENARIO("Test select function") {
+    GIVEN("Wavelet tree with small string") {
+        string given_small_string = "ab";
+        Wavelet given_wavelet_tree(given_small_string);
+
+        WHEN("Rank is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.rank('a',0);
+            THEN("Actual amount is equal to 0") {
+                REQUIRE(actual_amount == 0);
+            }
+        }
+
+        WHEN("Rank is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.rank('a',2);
+            THEN("Actual amount is equal to 1") {
+                REQUIRE(actual_amount == 1);
+            }
+        }
+
+        WHEN("Rank is ran in expected range") {
+            auto actual_amount = given_wavelet_tree.rank('b',1);
+            THEN("Actual amount is equal to 0") {
+                REQUIRE(actual_amount == 0);
+            }
+        }
+
+        WHEN("Rank is ran in out of expected range") {
+            THEN("Rank should trow") {
+                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',3), invalid_argument);
+            }
+        }
+    }
+
+    GIVEN("Wavelet tree with medium string") {
+        string given_medium_string = "mississippi";
+        Wavelet given_wavelet_tree(given_medium_string);
+
+        WHEN("Rank is given non existing letter") {
+            THEN("Rank should throw") {
+                REQUIRE_THROWS_AS(given_wavelet_tree.rank('a',given_medium_string.length()) , invalid_argument);
+            }
+        }
+
+        WHEN("Rank is given starting letter at index after") {
+            auto actual_amount = given_wavelet_tree.rank('m',1);
+            THEN("ActualAmount is equal to 1") {
+                REQUIRE(actual_amount == 1);
+            }
+        }
+
+        WHEN("Rank is given middle letter right at its 3rd index") {
+            auto actual_amount = given_wavelet_tree.rank('s',5);
+            THEN("ActualAmount is equal to 2") {
+                REQUIRE(actual_amount == 2);
+            }
+        }
+    }
+}
