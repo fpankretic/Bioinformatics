@@ -6,6 +6,7 @@
 #include <sdsl/csa_bitcompressed.hpp>
 #include "Wavelet.hpp"
 
+//Code could use some comments ;)
 class RIndex {
 private:
     Wavelet wavelet_tree;
@@ -15,6 +16,7 @@ private:
     rank_support_v<1,1> phrase_rank1;
 
 public:
+    //add const to methods
     explicit RIndex(const string &input);
 
     void build_locate_structs(const string &str, const vector<int> &sa);

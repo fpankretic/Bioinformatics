@@ -36,6 +36,7 @@ void Wavelet::build(const string &str) {
     build_impl(start, str, alphas);
 }
 
+//Instead of filling in the root I would suggest to construct the node and return it from this function
 void Wavelet::build_impl(const shared_ptr<Node>& root, const string &str, vector<char> &alphas, const string &label) {
     auto [left, right] = get_alphabets(alphas);
 
@@ -121,6 +122,7 @@ char Wavelet::access(unsigned long index) {
     return node->chr;
 }
 
+//const before char is probably overkill
 int Wavelet::rank(const char character, int index) {
     auto node = start;
     int k = 0;

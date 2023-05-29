@@ -1,8 +1,8 @@
 //
 #include "../include/RIndex.hpp"
 
-RIndex::RIndex(const string &input){
-    csa_bitcompressed<> csa; 
+RIndex::RIndex(const string &input) {
+    csa_bitcompressed<> csa;
     construct_im(csa, input, 1);
 
     string bwt;
@@ -47,9 +47,12 @@ RIndex::RIndex(const string &input){
 }
 
 void RIndex::build_locate_structs(const string& str, const vector<int> &sa) {
+    //why do you need this copy and local variable?
     auto original = run_offsets;
 
+    //'reverse inverse suffix array'? :)
     unordered_map<int, int> reverse_isa;
+    //rename map_
     for (const auto& map_ : original) {
         if (map_.first != '$') {
             for (const auto& entry : map_.second) {
@@ -135,13 +138,15 @@ int RIndex::count(const string& pattern) {
 vector<int> RIndex::locate(const string& pattern) {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
+    //I forgot: can we assert that bottom == bwt_offset here?
+
     if (top == bottom) {
         return {};
     }
 
-    vector<int> offsets; 
+    vector<int> offsets;
     offsets.push_back(text_offset);
-    
+
     for (int i = 0; i < bottom - top - 1; ++i) {
         int left = find_neighbours_offset(text_offset - 1);
         offsets.push_back(left);
