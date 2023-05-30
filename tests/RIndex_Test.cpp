@@ -3,7 +3,7 @@
 #include "../include/RIndex.hpp"
 
 SCENARIO("Test locate function.") {
-    GIVEN("R index with short string and non cotaining patter.") {
+    GIVEN("R index with short string and non containing patter.") {
         string given_string = "mississippi";
         RIndex given_R_index(given_string);
         string given_short_pattern = "misisisis";

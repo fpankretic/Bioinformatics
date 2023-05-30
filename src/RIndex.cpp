@@ -122,6 +122,8 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) const {
 int RIndex::count(const string& pattern) const {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
+    assert(bwt_offset == bottom - 1);
+
     if (top >= bottom) {
         return 0;
     }
@@ -131,6 +133,8 @@ int RIndex::count(const string& pattern) const {
 
 vector<int> RIndex::locate(const string& pattern) const {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
+
+    assert(bwt_offset == bottom - 1);
 
     if (top == bottom) {
         return {};
