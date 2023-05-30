@@ -31,6 +31,6 @@
 *.out
 *.app
 
-cmake-build_tree-debug/
+cmake-build-debug/
 .vscode/
 .idea/
