@@ -1,4 +1,3 @@
-//
 #ifndef BIOINFORMATICS_WAVELET_HPP
 #define BIOINFORMATICS_WAVELET_HPP
 
@@ -6,17 +5,13 @@
 #include <iostream>
 #include <queue>
 #include <utility>
+#include <unordered_set>
 
 using namespace std;
 using namespace sdsl;
 
 struct Node {
-    //Wow, I missed you switching to shared_ptrs!
-    //EPIC!
-    //You end up with cycles and leaked memory here.
-    //parent should probably be weak_ptr!
-    //Check that nodes actually get destroyed
-    shared_ptr<Node> parent = nullptr;
+    weak_ptr<Node> parent;
     shared_ptr<Node> left = nullptr;
     shared_ptr<Node> right = nullptr;
 
@@ -28,20 +23,22 @@ struct Node {
 
     char chr = 0;
 
-    explicit Node() = default;
-
-    explicit Node(char c) {
-        chr = c;
-    }
-
-    //since you are moving it, the argument here should be rvalue reference!
-    //should probably be constructor of the node? see related comment in .cpp
-    void construct_vector(bit_vector vec) {
-        this->b_vector = std::move(vec);
+    Node(const string &str, const vector<char> &right) {
+        unordered_set<char> right_character_set(right.begin(), right.end());
+        b_vector = bit_vector(str.size(), 0);
+        for (int i = 0; i < str.size(); ++i) {
+            if (right_character_set.contains(str[i])) {
+                b_vector[i] = true;
+            }
+        }
         this->rank0 = rank_support_v<0, 1>(&(this->b_vector));
         this->rank1 = rank_support_v<1, 1>(&(this->b_vector));
         this->select0 = select_support_mcl<0, 1>(&(this->b_vector));
         this->select1 = select_support_mcl<1, 1>(&(this->b_vector));
+    };
+
+    explicit Node(char c) {
+        chr = c;
     }
 };
 
@@ -51,10 +48,10 @@ private:
     map<char, int> char_offsets;
     map<char, int> char_counts;
     unordered_map<char, string> labels;
-    int text_len;
+    int text_len = 0;
 
 private:
-    void build_impl(const shared_ptr<Node> &root, const string &str, vector<char> &alphas, const string &label = "");
+    shared_ptr<Node> build_tree(const string &str, const vector<char> &alphas, const string &label = "");
 
     static tuple<vector<char>, vector<char>> get_alphabets(const vector<char> &alphas) {
         vector<char> left;
@@ -71,28 +68,25 @@ private:
     }
 
 public:
-    //add const to methods that don't modify wavelet (e.g. most of them)
     explicit Wavelet() = default;
 
     explicit Wavelet(const string &str);
 
-    shared_ptr<Node> get_start();
+    shared_ptr<Node> get_start() const;
 
     int get_text_len() const;
 
-    int get_char_offset(char c);
+    int get_char_offset(char c) const;
 
-    int lf_mapping(char c, int index);
+    int lf_mapping(char c, int index) const;
 
-    void build(const string &str);
+    char access(unsigned long index) const;
 
-    char access(unsigned long index);
+    int rank(char character, int index) const;
 
-    int rank(char character, int index);
+    int select(char character, int index) const;
 
-    int select(char character, int index);
-
-    void print();
+    void print() const;
 };
 
 #endif

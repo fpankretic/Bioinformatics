@@ -1,4 +1,3 @@
-//
 #ifndef BIOINFORMATICS_FMINDEX_HPP
 #define BIOINFORMATICS_FMINDEX_HPP
 
@@ -12,12 +11,17 @@ private:
     Wavelet wavelet_tree;
 
 public:
-    explicit FMIndex(const string& input);
-    pair<int, int> match(const string& pattern);
-    int count(const string& pattern);
-    vector<int> locate(const string& pattern);
-    void print_suffix_array();
-    void print_pattern_offsets(const string& pattern);
+    explicit FMIndex(const string &input);
+
+    pair<int, int> match(const string &pattern) const;
+
+    int count(const string &pattern) const;
+
+    vector<int> locate(const string &pattern) const;
+
+    void print_suffix_array() const;
+
+    void print_pattern_offsets(const string &pattern) const;
 };
 
 #endif

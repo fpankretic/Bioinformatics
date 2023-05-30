@@ -1,4 +1,3 @@
-//
 #include "../include/RIndex.hpp"
 
 RIndex::RIndex(const string &input) {
@@ -47,37 +46,32 @@ RIndex::RIndex(const string &input) {
 }
 
 void RIndex::build_locate_structs(const string& str, const vector<int> &sa) {
-    //why do you need this copy and local variable?
-    auto original = run_offsets;
-
-    //'reverse inverse suffix array'? :)
-    unordered_map<int, int> reverse_isa;
-    //rename map_
-    for (const auto& map_ : original) {
-        if (map_.first != '$') {
-            for (const auto& entry : map_.second) {
-                reverse_isa[entry.second] = entry.first;
+    unordered_map<int, int> reverse_sa;
+    for (const auto& curr_char_offsets : run_offsets) {
+        if (curr_char_offsets.first != '$') {
+            for (const auto& entry : curr_char_offsets.second) {
+                reverse_sa[entry.second] = entry.first;
             }
         }
     }
 
     phrase_starts = bit_vector(str.size());
     for (int i = 0; i < str.size(); ++i) {
-        if (reverse_isa.contains(i)) {
+        if (reverse_sa.contains(i)) {
             phrase_starts[i] = true;
-            neighbours.emplace_back(sa[reverse_isa[i] - 1]);
+            neighbours.emplace_back(sa[reverse_sa[i] - 1]);
         }
     }
     phrase_rank1 = rank_support_v(&phrase_starts);
 }
 
-int RIndex::find_neighbours_offset(int k) {
+int RIndex::find_neighbours_offset(int k) const {
     auto index = phrase_rank1(k);
     if (!phrase_starts[k]) index--;
     return neighbours[index] + k - index;
 }
 
-pair<int, int> RIndex::pred(char c, int offset) {
+pair<int, int> RIndex::pred(char c, int offset) const {
     const map<int, int>& curr_char_map = run_offsets.at(c);
 
     int rank = wavelet_tree.rank(c, offset);
@@ -91,7 +85,7 @@ pair<int, int> RIndex::pred(char c, int offset) {
     return {bwt_offset, text_offset};
 }
 
-tuple<int, int, int, int> RIndex::match(const string& pattern) {
+tuple<int, int, int, int> RIndex::match(const string& pattern) const {
     if (pattern.empty()) {
         throw invalid_argument("Pattern must be at least one character.");
     }
@@ -125,7 +119,7 @@ tuple<int, int, int, int> RIndex::match(const string& pattern) {
     return {top, bottom, bwt_offset, text_offset};
 }
 
-int RIndex::count(const string& pattern) {
+int RIndex::count(const string& pattern) const {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
 
     if (top >= bottom) {
@@ -135,10 +129,8 @@ int RIndex::count(const string& pattern) {
     return bottom - top;
 }
 
-vector<int> RIndex::locate(const string& pattern) {
+vector<int> RIndex::locate(const string& pattern) const {
     auto [top, bottom, bwt_offset, text_offset] = match(pattern);
-
-    //I forgot: can we assert that bottom == bwt_offset here?
 
     if (top == bottom) {
         return {};
@@ -157,7 +149,7 @@ vector<int> RIndex::locate(const string& pattern) {
     return offsets;
 }
 
-void RIndex::print_pattern_offsets(const string& pattern) {
+void RIndex::print_pattern_offsets(const string& pattern) const {
     vector<int> occs = locate(pattern);
     if (!occs.empty()) {
         cout << endl << "Offsets of pattern " << pattern << " in text: " << endl;
