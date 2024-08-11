@@ -19,7 +19,7 @@ FMIndex::FMIndex(const string &input) {
     wavelet_tree = Wavelet(bwt);
 }
 
-pair<int, int> FMIndex::match(const string& pattern) {
+pair<int, int> FMIndex::match(const string& pattern) const {
     if (pattern.empty()) {
         throw invalid_argument("Pattern must be at least one character.");
     }
@@ -40,7 +40,7 @@ pair<int, int> FMIndex::match(const string& pattern) {
     return {top, bottom};
 }
 
-int FMIndex::count(const string& pattern) {
+int FMIndex::count(const string& pattern) const {
     auto [top, bottom] = match(pattern);
 
     if (top >= bottom) {
@@ -50,7 +50,7 @@ int FMIndex::count(const string& pattern) {
     return bottom - top;
 }
 
-vector<int> FMIndex::locate(const string& pattern) {
+vector<int> FMIndex::locate(const string& pattern) const {
     auto [top, bottom] = match(pattern);
 
     vector<int> offsets;
@@ -65,7 +65,7 @@ vector<int> FMIndex::locate(const string& pattern) {
     return offsets;
 }
 
-void FMIndex::print_suffix_array() {
+void FMIndex::print_suffix_array() const {
     cout << "Suffix array: ";
     for (int i: suffix_array) {
         cout << i << " ";
@@ -73,7 +73,7 @@ void FMIndex::print_suffix_array() {
     cout << endl;
 }
 
-void FMIndex::print_pattern_offsets(const string& pattern) {
+void FMIndex::print_pattern_offsets(const string& pattern) const {
     vector<int> occs = locate(pattern);
     if (!occs.empty()) {
         cout << endl << "Offsets of pattern " << pattern << " in text: " << endl;

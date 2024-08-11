@@ -1,5 +1,4 @@
 #include <iostream>
-#include <unordered_set>
 #include "include/Wavelet.hpp"
 #include "include/FMIndex.hpp"
 #include "include/RIndex.hpp"
